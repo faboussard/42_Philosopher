@@ -21,8 +21,9 @@
 # include <sys/time.h>
 # include <stdbool.h>
 
-typedef struct s_philo		t_philo;
-typedef struct s_table		t_table;
+//typedef struct s_philo		t_philo;
+//typedef struct s_table		t_table;
+//typedef p_thread_mutex_t	t_mutex;
 
 struct s_table
 {
