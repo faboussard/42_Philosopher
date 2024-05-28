@@ -31,19 +31,21 @@ void *routine()
 		printf("ending\n");
 		i--;
 	}
+	pthread_mutex_destroy(&mutex_mails);
 	return (NULL);
 }
+
 
 int	valid_args(int argc, char **argv)
 {
 	size_t	i;
 	int	nb_arg;
 
-	i = 1;
+	i = 0;
 	nb_arg = argc - 1;
 	while (nb_arg > 0)
 	{
-		if (ft_atoi(argv[nb_arg]) < 0 || ft_atol(argv[nb_arg]) < INT_MIN || ft_atol(argv[nb_arg]) > INT_MAX)
+		if (ft_atol(argv[nb_arg]) < 0 || ft_atol(argv[nb_arg]) > INT_MAX || ft_atol(argv[nb_arg]) < INT_MIN)
 			return (false);
 		while (argv[nb_arg][i])
 		{
@@ -52,29 +54,49 @@ int	valid_args(int argc, char **argv)
 			i++;
 		}
 		nb_arg--;
-		i = 1;
+		i = 0;
 	}
 	return (true);
+}
+
+void launch_party(t_table *table)
+{
+	unsigned int	philos;
+	unsigned int i;
+
+	i = 0;
+	philos = table->philos;
+	pthread_t th[philos];
+	while (i < philos)
+	{
+		if (pthread_create(th + i, NULL, &routine, NULL) != 0)
+		{
+			ft_putendl_fd("Failed to create thread", STDERR_FILENO);
+			return ;
+		}
+		if (pthread_join(th[i], NULL) != 0)
+		{
+			ft_putendl_fd("Failed to liberate thread", STDERR_FILENO);
+			return ;
+		}
+		i++;
+	}
 }
 
 int main(int argc, char **argv)
 {
 	t_table *table;
-	pthread_t t1;
 
 	table = NULL;
-
 	if ((argc != 6 && argc != 7) || !valid_args(argc, argv))
-		return (1);
-	// faire le nombre de philosopher. et les verifier a chaquoifois.
-
-	//voir ou faire toutes les initiatlisations de mutex.
-
-
-
-	pthread_create(&t1, NULL, &routine, NULL);
-
-	//faire pour tous les philos.
-	pthread_join(t1, NULL);
+	{
+		ft_putendl_fd("arguments are not valid.", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
+	table = init_table(argv, table);
+	if (table == NULL)
+		return (EXIT_FAILURE);
+	launch_party(table);
+	free_table(table);
 	return (0);
 }

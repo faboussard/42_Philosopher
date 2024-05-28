@@ -18,11 +18,11 @@ u_int64_t	actual_time(void)
 	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL) == -1)
-		ft_error("Gettimeofday returned -1\n");
+		ft_putendl_fd("Gettimeofday returned -1\n", STDERR_FILENO);
 	return ((tv.tv_sec * (u_int64_t)1000) + (tv.tv_usec / 1000));
 }
 
-void	ft_usleep(long int time_in_ms)
+void	ft_usleep(u_int64_t time_in_ms)
 {
 	u_int64_t	start_time;
 
