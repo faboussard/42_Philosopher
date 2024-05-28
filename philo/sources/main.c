@@ -12,38 +12,27 @@
 
 #include "philo.h"
 
-//void *routine()
-//{
-//	int mails;
-//	int i;
-//	t_mutex mutex_mails;
-//
-//	mails = 0;
-//	i = 10;
-//	while (i > 0)
-//	{
-//		pthread_mutex_lock(&mutex_mails);
-//		mails++;
-//		pthread_mutex_unlock(&mutex_mails);
-//		printf("%d\n", mails);
-//		sleep(3);
-//		printf("ending\n");
-//		i--;
-//	}
-//}
-//
+void *routine()
+{
+	int mails;
+	int i;
+	t_mutex mutex_mails;
 
-// faire mes data strcutures
-
-//faier la fonction init table
-
-//bien proteger les threads
-//tous les ouvrir en meme temps
-// tous les fermer en meme temps
-
-//faire un mutex pour chaque variable
-
-// faire la fonction ft-usleep
+	pthread_mutex_init(&mutex_mails, NULL);
+	mails = 0;
+	i = 10;
+	while (i > 0)
+	{
+		pthread_mutex_lock(&mutex_mails);
+		mails++;
+		pthread_mutex_unlock(&mutex_mails);
+		printf("%d\n", mails);
+		ft_usleep(3);
+		printf("ending\n");
+		i--;
+	}
+	return (NULL);
+}
 
 int	valid_args(int argc, char **argv)
 {
@@ -70,23 +59,22 @@ int	valid_args(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
-//	t_table *table;
-//
-//	table = NULL;
+	t_table *table;
+	pthread_t t1;
+
+	table = NULL;
 
 	if ((argc != 6 && argc != 7) || !valid_args(argc, argv))
 		return (1);
-//	p_thread t1;
-//	// faire le nombre de philosopher. et les verifier a chaquoifois.
-//
-//	//voir ou faire toutes les initiatlisations de mutex.
-//	pthread_mutex_init(&mutex_mails, NULL);
-//
-//
-//
-//	pthread_create(&t1, NULL, &routine, NULL);
-//
-//	//faire pour tous les philos.
-//	pthread_join(t1, NULL);
+	// faire le nombre de philosopher. et les verifier a chaquoifois.
+
+	//voir ou faire toutes les initiatlisations de mutex.
+
+
+
+	pthread_create(&t1, NULL, &routine, NULL);
+
+	//faire pour tous les philos.
+	pthread_join(t1, NULL);
 	return (0);
 }

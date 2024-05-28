@@ -8,7 +8,9 @@ OBJ_PATH = objects/
 SRC		=	main.c \
 			init.c \
 			exit.c \
-			utils.c
+			utils.c \
+		    lib1.c \
+		    lib2.c
 
 SRCS	= $(addprefix $(SRC_PATH), $(SRC))
 OBJ		= $(SRC:.c=.o)

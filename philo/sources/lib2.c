@@ -11,22 +11,19 @@
 /* ************************************************************************** */
 
 
-#include "philo.h"
+#include "../includes/philo.h"
 
-u_int64_t	actual_time(void)
+size_t	ft_strlen(const char *string)
 {
-	struct timeval	tv;
+	size_t	i;
 
-	if (gettimeofday(&tv, NULL) == -1)
-		ft_error("Gettimeofday returned -1\n");
-	return ((tv.tv_sec * (u_int64_t)1000) + (tv.tv_usec / 1000));
+	i = 0;
+	while (string[i])
+		i++;
+	return (i);
 }
 
-void	ft_usleep(long int time_in_ms)
+void	ft_putstr_fd(const char *s, int fd)
 {
-	u_int64_t	start_time;
-
-	start_time = actual_time();
-	while ((actual_time() - start_time) < time_in_ms)
-		usleep(time_in_ms / 10);
+	write(fd, s, ft_strlen(s));
 }
