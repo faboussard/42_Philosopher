@@ -1,6 +1,6 @@
 NAME	= philo
 CC		= cc
-CFLAGS	= -Werror -Wall -Wextra -pthread
+CFLAGS	= -Werror -Wall -Wextra -pthread -g3
 
 SRC_PATH = sources/
 OBJ_PATH = objects/
@@ -24,6 +24,9 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.c includes/philo.h
 
 $(NAME): includes/ $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@
+
+debug: clean
+	$(MAKE) CFLAGS="-g"
 
 clean:
 	rm -rf $(OBJ_PATH)

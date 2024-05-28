@@ -40,15 +40,18 @@ int	valid_args(int argc, char **argv)
 	i = 1;
 	while (argc > 1)
 	{
-		if (ft_atol(argv[argc]) < INT_MIN || ft_atol(argv[argc]) > INT_MAX)
-			return (false);
+		printf("%d\n", argc);
+//		if (ft_atol(argv[argc]) < INT_MIN && ft_atol(argv[argc]) > INT_MAX)
+//			return (false);
 		while (argv[argc][i])
 		{
+			printf("%d\n", argv[argc][i]);
 			if (!ft_isdigit(argv[argc][i]))
 				return (false);
 			i++;
 		}
 		argc--;
+		printf("%d\n", argc);
 		i = 1;
 	}
 	return (true);
