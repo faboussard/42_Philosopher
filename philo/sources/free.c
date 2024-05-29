@@ -15,5 +15,6 @@
 
 void 	free_table(t_table *table)
 {
+	free(table->philo);
 	free(table);
 }

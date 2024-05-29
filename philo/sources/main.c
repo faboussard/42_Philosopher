@@ -24,11 +24,8 @@ void *routine()
 	while (i > 0)
 	{
 		pthread_mutex_lock(&mutex_mails);
-		mails++;
+
 		pthread_mutex_unlock(&mutex_mails);
-		printf("%d\n", mails);
-		ft_usleep(3);
-		printf("ending\n");
 		i--;
 	}
 	pthread_mutex_destroy(&mutex_mails);
@@ -59,43 +56,88 @@ int	valid_args(int argc, char **argv)
 	return (true);
 }
 
-void launch_party(t_table *table)
+void create_threads(t_table *table)
 {
-	unsigned int	philos;
+	unsigned int philos;
 	unsigned int i;
 
 	i = 0;
-	philos = table->philos;
+	philos = table->num_of_philos;
 	pthread_t th[philos];
 	while (i < philos)
 	{
 		if (pthread_create(th + i, NULL, &routine, NULL) != 0)
 		{
 			ft_putendl_fd("Failed to create thread", STDERR_FILENO);
-			return ;
-		}
-		if (pthread_join(th[i], NULL) != 0)
-		{
-			ft_putendl_fd("Failed to liberate thread", STDERR_FILENO);
-			return ;
+			return;
 		}
 		i++;
 	}
+}
+
+void terminate_threads(t_table *table)
+{
+	unsigned int philos;
+	unsigned int i;
+
+	i = 0;
+	philos = table->num_of_philos;
+	pthread_t th[philos];
+
+	while (i < philos)
+	{
+		if (pthread_join(th[i], NULL) != 0)
+		{
+			ft_putendl_fd("Failed to liberate thread", STDERR_FILENO);
+			return;
+		}
+		i++;
+	}
+}
+
+void init_philos(t_table *table, char **argv)
+{
+	unsigned int num_of_philos;
+	unsigned int i;
+	unsigned int j;
+
+	i = 0;
+	num_of_philos = table->num_of_philos;
+	table->philo = ft_calloc(num_of_philos, sizeof(t_philo));
+	while (i < num_of_philos)
+	{
+		j = 2;
+		table->philo[i].index = i;
+		table->philo[i].has_taken_two_forks = false;
+		table->philo[i].time_to_die = ft_atoi(argv[j++]);
+		table->philo[i].time_to_eat = ft_atoi(argv[j++]);
+		table->philo[i].time_to_sleep = ft_atoi(argv[j++]);
+		if (argv[j])
+			table->philo[i].number_of_meals = ft_atoi(argv[j]);
+		table->philo[i].time_last_meal = current_time();
+		i++;
+	}
+}
+
+void launch_party(t_table *table)
+{
+	create_threads(table);
+	terminate_threads(table);
 }
 
 int main(int argc, char **argv)
 {
 	t_table *table;
 
-	table = NULL;
-	if ((argc != 6 && argc != 7) || !valid_args(argc, argv))
+	if ((argc != 5 && argc != 6) || !valid_args(argc, argv))
 	{
 		ft_putendl_fd("arguments are not valid.", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-	table = init_table(argv, table);
+	table = init_table(argv);
 	if (table == NULL)
 		return (EXIT_FAILURE);
+	init_philos(table, argv);
 	launch_party(table);
 	free_table(table);
 	return (0);

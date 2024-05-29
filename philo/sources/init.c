@@ -12,9 +12,13 @@
 
 #include "philo.h"
 
-t_table *init_table(char *const *argv, t_table *table)
+t_table *init_table(char *const *argv)
 {
+	t_table *table;
+
 	table = ft_calloc(1, sizeof(t_table));
-	table->philos = ft_atoi(argv[1]);
+	if (!table)
+		return (NULL);
+	table->num_of_philos = ft_atoi(argv[1]);
 	return (table);
 }

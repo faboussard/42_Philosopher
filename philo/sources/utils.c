@@ -13,7 +13,7 @@
 
 #include "philo.h"
 
-u_int64_t	actual_time(void)
+u_int64_t	current_time(void)
 {
 	struct timeval	tv;
 
@@ -26,7 +26,7 @@ void	ft_usleep(u_int64_t time_in_ms)
 {
 	u_int64_t	start_time;
 
-	start_time = actual_time();
-	while ((actual_time() - start_time) < time_in_ms)
+	start_time = current_time();
+	while ((current_time() - start_time) < time_in_ms)
 		usleep(time_in_ms / 10);
 }

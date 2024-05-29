@@ -28,24 +28,22 @@ typedef pthread_mutex_t		t_mutex;
 
 typedef struct s_table
 {
-	unsigned int philos;
-	unsigned int forks;
-	unsigned int meals;
+	int 			num_of_philos;
+	bool	 		dead_flag;
+	unsigned int	forks;
+	unsigned int	meals;
+	t_philo 		*philo;
 }				t_table;
 
 typedef struct s_philo
 {
-	int				index;
-	unsigned int	philo_id;
-	unsigned int	meals;
+	unsigned		index;
 	bool			has_taken_two_forks;
-	time_t				time_to_die;
+	time_t			time_to_die;
 	time_t 			time_to_eat;
 	time_t 			time_to_sleep;
-	time_t 			time_last_meal;
-	time_t 			is_eating;
-	time_t 			is_sleeping;
-	time_t 			is_thinking;
+	time_t 			number_of_meals;
+	u_int64_t 			time_last_meal;
 	t_table				*table;
 }				t_philo;
 
@@ -61,7 +59,8 @@ void	*ft_calloc(size_t nmemb, size_t size);
 void	ft_putendl_fd(const char *s, int fd);
 char	*ft_strjoin(char const *s1, char const *s2);
 void 	free_table(t_table *table);
-t_table * init_table(char *const *argv, t_table *table);
+t_table *init_table(char *const *argv);
+u_int64_t	current_time(void);
 
 
 #endif //PHILO_H
