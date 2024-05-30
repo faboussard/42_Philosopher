@@ -13,18 +13,18 @@
 
 #include "philo.h"
 
-u_int64_t	current_time(void)
+size_t	current_time(void)
 {
 	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL) == -1)
 		ft_putendl_fd("Gettimeofday returned -1\n", STDERR_FILENO);
-	return ((tv.tv_sec * (u_int64_t)1000) + (tv.tv_usec / 1000));
+	return ((tv.tv_sec * (size_t)1000) + (tv.tv_usec / 1000));
 }
 
-void	ft_usleep(u_int64_t time_in_ms)
+void	ft_usleep(size_t time_in_ms)
 {
-	u_int64_t	start_time;
+	size_t	start_time;
 
 	start_time = current_time();
 	while ((current_time() - start_time) < time_in_ms)

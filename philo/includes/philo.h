@@ -40,11 +40,11 @@ typedef struct s_philo
 {
 	unsigned		index;
 	bool			has_taken_two_forks;
-	time_t			time_to_die;
-	time_t 			time_to_eat;
-	time_t 			time_to_sleep;
-	time_t 			number_of_meals;
-	u_int64_t 			time_last_meal;
+	size_t			time_to_die;
+	size_t 			time_to_eat;
+	size_t 			time_to_sleep;
+	size_t 			number_of_meals;
+	size_t 			time_last_meal;
 	t_table				*table;
 }				t_philo;
 
@@ -61,8 +61,15 @@ void	ft_putendl_fd(const char *s, int fd);
 char	*ft_strjoin(char const *s1, char const *s2);
 void 	free_table(t_table *table);
 void init_table(char *const *argv, t_table **table);
-u_int64_t	current_time(void);
+size_t	current_time(void);
 void exit_with_error(t_table *table, char const *error_msg, int error_code);
+int	valid_args(int argc, char **argv);
+void create_threads(t_table *table);
+void terminate_threads(t_table *table);
+void init_philos(t_table *table, char **argv);
+void launch_party(t_table *table);
+void *routine();
+void init_mutex(t_table *table);
 
 
 #endif //PHILO_H
