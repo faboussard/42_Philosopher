@@ -15,6 +15,13 @@
 
 void 	free_table(t_table *table)
 {
-	free(table->philo);
+	if (table == NULL)
+		return ;
+	if (table->philo)
+	{
+		free(table->philo);
+		table->philo = NULL;
+	}
 	free(table);
+	table = NULL;
 }

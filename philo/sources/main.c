@@ -14,17 +14,14 @@
 
 void *routine()
 {
-	int mails;
 	int i;
 	t_mutex mutex_mails;
 
 	pthread_mutex_init(&mutex_mails, NULL);
-	mails = 0;
 	i = 10;
 	while (i > 0)
 	{
 		pthread_mutex_lock(&mutex_mails);
-
 		pthread_mutex_unlock(&mutex_mails);
 		i--;
 	}
@@ -125,18 +122,21 @@ void launch_party(t_table *table)
 	terminate_threads(table);
 }
 
+void exit_with_error(t_table *table, char const *error_msg, int error_code)
+{
+	free_table(table);
+	ft_putendl_fd(error_msg, STDERR_FILENO);
+	exit(error_code);
+}
+
 int main(int argc, char **argv)
 {
 	t_table *table;
 
+	table = NULL;
 	if ((argc != 5 && argc != 6) || !valid_args(argc, argv))
-	{
-		ft_putendl_fd("arguments are not valid.", STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
-	table = init_table(argv);
-	if (table == NULL)
-		return (EXIT_FAILURE);
+		exit_with_error(table, "arguments are not valid.", EXIT_FAILURE);
+	init_table(argv, &table);
 	init_philos(table, argv);
 	launch_party(table);
 	free_table(table);

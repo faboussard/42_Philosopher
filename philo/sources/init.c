@@ -12,13 +12,11 @@
 
 #include "philo.h"
 
-t_table *init_table(char *const *argv)
+void init_table(char *const *argv, t_table **table)
 {
-	t_table *table;
-
-	table = ft_calloc(1, sizeof(t_table));
-	if (!table)
-		return (NULL);
-	table->num_of_philos = ft_atoi(argv[1]);
-	return (table);
+	*table = ft_calloc(1, sizeof(t_table));
+	if (!*table)
+		exit_with_error(NULL, "Malloc error\n", ENOMEM);
+	ft_bzero(*table, sizeof(t_table));
+	(*table)->num_of_philos = ft_atoi(argv[1]);
 }

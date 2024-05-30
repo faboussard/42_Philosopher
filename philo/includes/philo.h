@@ -21,6 +21,7 @@
 # include <sys/time.h>
 # include <stdbool.h>
 #include <string.h>
+#include <errno.h>
 
 typedef struct s_philo		t_philo;
 typedef struct s_table		t_table;
@@ -59,8 +60,9 @@ void	*ft_calloc(size_t nmemb, size_t size);
 void	ft_putendl_fd(const char *s, int fd);
 char	*ft_strjoin(char const *s1, char const *s2);
 void 	free_table(t_table *table);
-t_table *init_table(char *const *argv);
+void init_table(char *const *argv, t_table **table);
 u_int64_t	current_time(void);
+void exit_with_error(t_table *table, char const *error_msg, int error_code);
 
 
 #endif //PHILO_H
