@@ -33,18 +33,24 @@ typedef struct s_table
 	bool	 		dead_flag;
 	unsigned int	forks;
 	unsigned int	meals;
+	t_mutex			meals_mutex;
+	t_mutex			print_mutex;
+	t_mutex			dead_mutex;
 	t_philo 		*philo;
 }				t_table;
 
 typedef struct s_philo
 {
-	unsigned		index;
-	bool			has_taken_two_forks;
+	unsigned		id;
+	bool			has_taken_a_fork;
 	size_t			time_to_die;
 	size_t 			time_to_eat;
 	size_t 			time_to_sleep;
 	size_t 			number_of_meals;
 	size_t 			time_last_meal;
+	t_mutex			*right_fork_mutex;
+	t_mutex			*left_fork_mutex;
+	t_mutex			*print_mutex;
 	t_table				*table;
 }				t_philo;
 
@@ -68,8 +74,9 @@ void create_threads(t_table *table);
 void terminate_threads(t_table *table);
 void init_philos(t_table *table, char **argv);
 void launch_party(t_table *table);
-void *routine();
+void *routine(void *data);
 void init_mutex(t_table *table);
+void destroy_mutex(t_table *table);
 
 
 #endif //PHILO_H

@@ -12,21 +12,27 @@
 
 #include "philo.h"
 
-void *routine()
-{
-	int		i;
-	t_mutex mutex_mails;
+/*
+ * routine : le nombre de meals pris augmente.
+ * tant que time to eat, le philosopher mange .
+ * if time to eat = 0 , le philosopher pense.
+ * if time to think = 0, le philosophe remange.
+ */
 
-	pthread_mutex_init(&mutex_mails, NULL);
-	i = 10;
-	while (i > 0)
-	{
-		pthread_mutex_lock(&mutex_mails);
-		pthread_mutex_unlock(&mutex_mails);
-		i--;
-	}
-	pthread_mutex_destroy(&mutex_mails);
-	return (NULL);
+void *routine(void *pointer)
+{
+	t_philo *philo;
+
+	philo = (t_philo *)pointer;
+	if (philo->id % 2 == 0)
+		ft_usleep(1);
+	pthread_mutex_lock(philo->right_fork_mutex);
+	philo->has_taken_a_fork = true;
+	pthread_mutex_unlock(philo->right_fork_mutex);
+	pthread_mutex_lock(philo->print_mutex);
+	printf("%ld %d has taken a fork\n", current_time(), philo->id);
+	pthread_mutex_unlock(philo->print_mutex);
+	return (pointer);
 }
 
 void launch_party(t_table *table)
@@ -46,6 +52,7 @@ int main(int argc, char **argv)
 	init_philos(table, argv);
 	init_mutex(table);
 	launch_party(table);
+	destroy_mutex(table);
 	free_table(table);
 	return (0);
 }

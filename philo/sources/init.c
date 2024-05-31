@@ -19,7 +19,6 @@ void init_table(char *const *argv, t_table **table)
 		exit_with_error(NULL, "Malloc error\n", ENOMEM);
 	ft_bzero(*table, sizeof(t_table));
 	(*table)->num_of_philos = ft_atoi(argv[1]);
-	(*table)->forks = ft_atoi(argv[1]);
 }
 
 int	valid_args(int argc, char **argv)
@@ -62,8 +61,8 @@ void init_philos(t_table *table, char **argv)
 	while (i < num_of_philos)
 	{
 		j = 2;
-		table->philo[i].index = i;
-		table->philo[i].has_taken_two_forks = false;
+		table->philo[i].id = i;
+		table->philo[i].has_taken_a_fork = false;
 		table->philo[i].time_to_die = ft_atoi(argv[j++]);
 		table->philo[i].time_to_eat = ft_atoi(argv[j++]);
 		table->philo[i].time_to_sleep = ft_atoi(argv[j++]);
@@ -74,9 +73,40 @@ void init_philos(t_table *table, char **argv)
 	}
 }
 
-void init_mutex(t_table *table)
+
+void init_forks(t_philo *philos, int philo_num)
 {
-	pthread_mutex_init(&table->forks_mutex, NULL);
-	pthread_mutex_init(&table->write_mutex, NULL);
+	int i;
+
+	for (i = 0; i < philo_num; i++)
+	{
+		philos[i].right_fork_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+		if (philos[i].right_fork_mutex == NULL)
+		{
+			exit_with_error(philos[i].table, "Malloc error for right fork mutex\n", ENOMEM);
+		}
+		pthread_mutex_init(philos[i].right_fork_mutex, NULL);
+
+		philos[i].left_fork_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+		if (philos[i].left_fork_mutex == NULL)
+		{
+			exit_with_error(philos[i].table, "Malloc error for left fork mutex\n", ENOMEM);
+		}
+		pthread_mutex_init(philos[i].left_fork_mutex, NULL);
+	}
 }
 
+void init_mutex(t_table *table)
+{
+	pthread_mutex_init(&table->meals_mutex, NULL);
+	pthread_mutex_init(&table->print_mutex, NULL);
+	init_forks(table->philo, table->num_of_philos);
+}
+
+void destroy_mutex(t_table *table)
+{
+	pthread_mutex_destroy(&table->meals_mutex);
+	pthread_mutex_destroy(&table->print_mutex);
+	pthread_mutex_destroy(table->philo->right_fork_mutex);
+	pthread_mutex_destroy(table->philo->left_fork_mutex);
+}
