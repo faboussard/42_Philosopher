@@ -73,7 +73,6 @@ void init_philos(t_table *table, char **argv)
 	}
 }
 
-
 void init_forks(t_philo *philos, int philo_num)
 {
 	int i;
