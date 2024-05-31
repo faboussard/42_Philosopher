@@ -54,6 +54,11 @@ void init_philos(t_table *table, char **argv)
 	i = 0;
 	num_of_philos = table->num_of_philos;
 	table->philo = ft_calloc(num_of_philos, sizeof(t_philo));
+	if (table->philo == NULL)
+	{
+		free(table);
+		exit_with_error(table, "Malloc error\n", ENOMEM);
+	}
 	while (i < num_of_philos)
 	{
 		j = 2;
