@@ -12,12 +12,17 @@
 
 #include "philo.h"
 
-int eat(t_philo *philo);
+void eat(t_philo *philo);
 
 void is_dead(t_philo *philo)
 {
-	if ((current_time() - philo->time_last_meal) >= philo->time_to_die)
-		philo->dead_flag = true;
+	pthread_mutex_lock(&philo->table->death_mutex);
+	if (!philo->table->dead_detected && (current_time() - philo->time_last_meal) >= philo->time_to_die)
+	{
+		philo->table->dead_detected = true;
+		printf("%ld %d is dead\n", current_time(), philo->id);
+	}
+	pthread_mutex_unlock(&philo->table->death_mutex);
 }
 
 void *routine(void *pointer)
@@ -25,54 +30,41 @@ void *routine(void *pointer)
 	t_philo *philo;
 
 	philo = (t_philo *)pointer;
-//	while ("all alive")
-//	{
+	while (!philo->table->dead_detected)
+	{
 		is_dead(philo);
-		if (philo->dead_flag)
-		{
-			printf("%ld %d is dead\n", current_time(), philo->id);
-			return (NULL);
-		}
 		if (philo->id % 2 == 0)
 			ft_usleep(1);
-		if (!eat(philo))
-		{
-			printf("%ld %d is dead\n", current_time(), philo->id);
-			return (NULL);
-		}
+		eat(philo);
+		is_dead(philo);
 		printf("%ld %d is sleeping\n", current_time(), philo->id);
 		ft_usleep(philo->time_to_sleep);
 		is_dead(philo);
-		if (philo->dead_flag)
-		{
-			printf("%ld %d is dead\n", current_time(), philo->id);
-			return (NULL);
-		}
 		printf("%ld %d is thinking\n", current_time(), philo->id);
+		is_dead(philo);
 		ft_usleep(1);
-//	}
+	}
 	return (pointer);
 }
 
 
-int eat(t_philo *philo)
+
+void eat(t_philo *philo)
 {
-	if (philo->dead_flag == true)
-		return 0;
+	is_dead(philo);
 	pthread_mutex_lock(philo->r_fork_mutex);
 	printf("%ld %d has taken a fork\n", current_time(), philo->id);
 	philo->has_taken_a_fork = true;
+	ft_usleep(1);
 	pthread_mutex_lock(philo->l_fork_mutex);
+	is_dead(philo);
 	philo->has_taken_a_fork = true;
-	if (philo->dead_flag == true)
-		return 0;
 	printf("%ld %d has taken a fork\n", current_time(), philo->id);
 	philo->time_last_meal = current_time();
 	printf("%ld %d is eating\n", current_time(), philo->id);
 	ft_usleep(philo->time_to_eat);
 	pthread_mutex_unlock(philo->r_fork_mutex);
 	pthread_mutex_unlock(philo->l_fork_mutex);
-	return (1);
 }
 
 void launch_party(t_table *table)

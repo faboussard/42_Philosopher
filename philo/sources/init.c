@@ -119,6 +119,7 @@ void destroy_forks_mutex(t_philo *philos, int philo_num)
 
 void init_mutex(t_table *table)
 {
+	pthread_mutex_init(&table->death_mutex, NULL);
 	if (!init_forks_mutex(table))
 	{
 		destroy_mutex(table);
@@ -129,6 +130,7 @@ void init_mutex(t_table *table)
 
 void destroy_mutex(t_table *table)
 {
+	pthread_mutex_destroy(&table->death_mutex);
 	for (int i = 0; i < table->num_of_philos; i++)
 	{
 		pthread_mutex_destroy(&table->forks[i]);

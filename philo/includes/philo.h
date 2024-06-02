@@ -30,10 +30,10 @@ typedef pthread_mutex_t		t_mutex;
 typedef struct s_table
 {
 	int 			num_of_philos;
-	bool	 		dead_flag;
+	bool	 		dead_detected;
 	unsigned int	meals;
 	t_mutex			meals_mutex;
-	t_mutex			print_mutex;
+	t_mutex			death_mutex;
 	pthread_mutex_t *forks;
 	t_philo 		*philo;
 }				t_table;
@@ -50,6 +50,7 @@ typedef struct s_philo
 	size_t 			time_last_meal;
 	t_mutex 		*r_fork_mutex;
 	t_mutex 		*l_fork_mutex;
+	t_table 		*table;
 }				t_philo;
 
 

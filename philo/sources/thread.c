@@ -27,6 +27,8 @@ void create_threads(t_table *table)
 			ft_putendl_fd("Failed to create thread", STDERR_FILENO);
 			return;
 		}
+		if (table->dead_detected)
+			return ;
 		i++;
 	}
 }
