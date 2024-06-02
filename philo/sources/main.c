@@ -12,6 +12,8 @@
 
 #include "philo.h"
 
+void eat(t_philo *philo);
+
 /*
  * routine : le nombre de meals pris augmente.
  * tant que time to eat, le philosopher mange .
@@ -26,13 +28,25 @@ void *routine(void *pointer)
 	philo = (t_philo *)pointer;
 	if (philo->id % 2 == 0)
 		ft_usleep(1);
+	eat(philo);
+//	think(philo);
+//	sleep(philo);
+	return (pointer);
+}
+
+void eat(t_philo *philo)
+{
 	pthread_mutex_lock(philo->right_fork_mutex);
 	philo->has_taken_a_fork = true;
-	pthread_mutex_unlock(philo->right_fork_mutex);
-	pthread_mutex_lock(philo->print_mutex);
 	printf("%ld %d has taken a fork\n", current_time(), philo->id);
-	pthread_mutex_unlock(philo->print_mutex);
-	return (pointer);
+	pthread_mutex_lock(philo->left_fork_mutex);
+	philo->has_taken_a_fork = true;
+//	pthread_mutex_lock(philo->print_mutex);
+	printf("%ld %d has taken a fork\n", current_time(), philo->id);
+	printf("%ld %d is eating\n", current_time(), philo->id);
+//	pthread_mutex_unlock(philo->print_mutex);
+	pthread_mutex_unlock(philo->right_fork_mutex);
+	pthread_mutex_unlock(philo->left_fork_mutex);
 }
 
 void launch_party(t_table *table)

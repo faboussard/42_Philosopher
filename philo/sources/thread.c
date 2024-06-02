@@ -22,7 +22,7 @@ void create_threads(t_table *table)
 	pthread_t th[philos];
 	while (i < philos)
 	{
-		if (pthread_create(th + i, NULL, &routine, table->philo) != 0)
+		if (pthread_create(th + i, NULL, &routine, (void *)&table->philo[i]) != 0)
 		{
 			ft_putendl_fd("Failed to create thread", STDERR_FILENO);
 			return;
