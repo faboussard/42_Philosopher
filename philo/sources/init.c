@@ -73,19 +73,28 @@ void init_philos(t_table *table, char **argv)
 	}
 }
 
-int init_forks_mutex(t_philo *philos, int philo_num)
+int init_forks_mutex(t_table *table)
 {
 	int i;
+	int philo_num;
 
+	philo_num = table->num_of_philos;
+	table->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * philo_num);
+	if (table->forks == NULL)
+		return 0;
 	for (i = 0; i < philo_num; i++)
 	{
-		philos[i].fork_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-		if (philos[i].fork_mutex == NULL)
-			return (0);
-		pthread_mutex_init(philos[i].fork_mutex, NULL);
+		if (pthread_mutex_init(&table->forks[i], NULL) != 0)
+			return 0;
 	}
-	return (1);
+	for (i = 0; i < philo_num; i++)
+	{
+		table->philo[i].l_fork_mutex = &table->forks[i];
+		table->philo[i].r_fork_mutex = &table->forks[(i + 1) % philo_num];
+	}
+	return 1;
 }
+
 
 void destroy_forks_mutex(t_philo *philos, int philo_num)
 {
@@ -94,10 +103,15 @@ void destroy_forks_mutex(t_philo *philos, int philo_num)
 	i = 0;
 	while (i < philo_num)
 	{
-		if (philos[i].fork_mutex != NULL)
+		if (philos[i].r_fork_mutex != NULL)
 		{
-			pthread_mutex_destroy(philos[i].fork_mutex);
-			free(philos[i].fork_mutex);
+			pthread_mutex_destroy(philos[i].r_fork_mutex);
+			free(philos[i].r_fork_mutex);
+		}
+		if (philos[i].l_fork_mutex != NULL)
+		{
+			pthread_mutex_destroy(philos[i].l_fork_mutex);
+			free(philos[i].l_fork_mutex);
 		}
 		i++;
 	}
@@ -105,18 +119,19 @@ void destroy_forks_mutex(t_philo *philos, int philo_num)
 
 void init_mutex(t_table *table)
 {
-	pthread_mutex_init(&table->meals_mutex, NULL);
-	pthread_mutex_init(&table->print_mutex, NULL);
-	if (!init_forks_mutex(table->philo, table->num_of_philos))
+	if (!init_forks_mutex(table))
 	{
 		destroy_mutex(table);
-		exit_with_error(table, "Malloc error at init fork mutex\n", ENOMEM);
+		exit_with_error(table, "Error initializing fork mutexes\n", ENOMEM);
 	}
 }
 
+
 void destroy_mutex(t_table *table)
 {
-	pthread_mutex_destroy(&table->meals_mutex);
-	pthread_mutex_destroy(&table->print_mutex);
-	destroy_forks_mutex(table->philo, table->num_of_philos);
+	for (int i = 0; i < table->num_of_philos; i++)
+	{
+		pthread_mutex_destroy(&table->forks[i]);
+	}
+	free(table->forks);
 }

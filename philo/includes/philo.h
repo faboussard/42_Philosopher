@@ -31,10 +31,10 @@ typedef struct s_table
 {
 	int 			num_of_philos;
 	bool	 		dead_flag;
-	unsigned int	forks;
 	unsigned int	meals;
 	t_mutex			meals_mutex;
 	t_mutex			print_mutex;
+	pthread_mutex_t *forks;
 	t_philo 		*philo;
 }				t_table;
 
@@ -48,7 +48,8 @@ typedef struct s_philo
 	size_t 			time_to_sleep;
 	size_t 			number_of_meals;
 	size_t 			time_last_meal;
-	t_mutex 		*fork_mutex;
+	t_mutex 		*r_fork_mutex;
+	t_mutex 		*l_fork_mutex;
 }				t_philo;
 
 

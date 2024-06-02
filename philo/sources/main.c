@@ -21,10 +21,6 @@ void eat(t_philo *philo);
  * if time to think = 0, le philosophe remange.
  */
 
-void repeat()
-{
-	return ;
-}
 void *routine(void *pointer)
 {
 	t_philo *philo;
@@ -33,9 +29,10 @@ void *routine(void *pointer)
 	if (philo->id % 2 == 0)
 		ft_usleep(1);
 	eat(philo);
-//	sleep(philo);
-//	think(philo);
-    repeat();
+	printf("%ld %d is sleeping\n", current_time(), philo->id);
+	ft_usleep(philo->time_to_sleep);
+	printf("%ld %d is thinking\n", current_time(), philo->id);
+	ft_usleep(1);
 	return (pointer);
 }
 
@@ -44,7 +41,8 @@ bool is_dead(t_philo *philo)
 	if (current_time() - philo->time_to_die <= 0)
 	{
 		philo->dead_flag = true;
-		pthread_mutex_unlock(philo->fork_mutex);
+		pthread_mutex_unlock(philo->r_fork_mutex);
+		pthread_mutex_unlock(philo->l_fork_mutex);
 		return (true); ;
 	}
 	return (false);
@@ -54,13 +52,17 @@ void eat(t_philo *philo)
 {
 //	if (is_dead(philo))
 //		return ;
-	pthread_mutex_lock(philo->fork_mutex);
+	pthread_mutex_lock(philo->r_fork_mutex);
+	printf("%ld %d has taken a fork\n", current_time(), philo->id);
+	philo->has_taken_a_fork = true;
+	pthread_mutex_lock(philo->l_fork_mutex);
 	philo->has_taken_a_fork = true;
 	printf("%ld %d has taken a fork\n", current_time(), philo->id);
 	philo->time_last_meal = current_time();
 	printf("%ld %d is eating\n", current_time(), philo->id);
 	ft_usleep(philo->time_to_eat);
-	pthread_mutex_unlock(philo->fork_mutex);
+	pthread_mutex_unlock(philo->r_fork_mutex);
+	pthread_mutex_unlock(philo->l_fork_mutex);
 }
 
 void launch_party(t_table *table)
