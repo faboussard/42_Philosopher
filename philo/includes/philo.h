@@ -43,7 +43,7 @@ typedef struct s_philo
 	unsigned		id;
 	bool			has_taken_a_fork;
 	bool 			dead_flag;
-	int 			time_to_die;
+	size_t 			time_to_die;
 	size_t 			time_to_eat;
 	size_t 			time_to_sleep;
 	size_t 			number_of_meals;
