@@ -25,20 +25,32 @@ void *routine(void *pointer)
 	t_philo *philo;
 
 	philo = (t_philo *)pointer;
-	while ("all alive")
-	{
+//	while ("all alive")
+//	{
 		is_dead(philo);
 		if (philo->dead_flag)
+		{
+			printf("%ld %d is dead\n", current_time(), philo->id);
 			return (NULL);
+		}
 		if (philo->id % 2 == 0)
 			ft_usleep(1);
 		if (!eat(philo))
+		{
+			printf("%ld %d is dead\n", current_time(), philo->id);
 			return (NULL);
+		}
 		printf("%ld %d is sleeping\n", current_time(), philo->id);
 		ft_usleep(philo->time_to_sleep);
+		is_dead(philo);
+		if (philo->dead_flag)
+		{
+			printf("%ld %d is dead\n", current_time(), philo->id);
+			return (NULL);
+		}
 		printf("%ld %d is thinking\n", current_time(), philo->id);
 		ft_usleep(1);
-	}
+//	}
 	return (pointer);
 }
 
@@ -65,6 +77,11 @@ int eat(t_philo *philo)
 
 void launch_party(t_table *table)
 {
+	if (table->num_of_philos == 1)
+	{
+		printf("%ld %d is dead\n", current_time(), table->philo->id);
+		return ;
+	}
 	create_threads(table);
 	terminate_threads(table);
 }
