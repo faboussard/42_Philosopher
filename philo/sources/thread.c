@@ -20,15 +20,13 @@ void create_threads(t_table *table)
 	i = 0;
 	philos = table->num_of_philos;
 	pthread_t th[philos];
-	while (i < philos)
+	while (i < philos && !table->dead_detected)
 	{
 		if (pthread_create(th + i, NULL, &routine, (void *)&table->philo[i]) != 0)
 		{
 			ft_putendl_fd("Failed to create thread", STDERR_FILENO);
 			return;
 		}
-		if (table->dead_detected)
-			return ;
 		i++;
 	}
 }

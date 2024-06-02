@@ -36,10 +36,8 @@ void *routine(void *pointer)
 		if (philo->id % 2 == 0)
 			ft_usleep(1);
 		eat(philo);
-		is_dead(philo);
 		printf("%ld %d is sleeping\n", current_time(), philo->id);
 		ft_usleep(philo->time_to_sleep);
-		is_dead(philo);
 		printf("%ld %d is thinking\n", current_time(), philo->id);
 		is_dead(philo);
 		ft_usleep(1);
@@ -47,17 +45,22 @@ void *routine(void *pointer)
 	return (pointer);
 }
 
-
-
 void eat(t_philo *philo)
 {
 	is_dead(philo);
+	if (philo->table->dead_detected)
+		return;
 	pthread_mutex_lock(philo->r_fork_mutex);
 	printf("%ld %d has taken a fork\n", current_time(), philo->id);
 	philo->has_taken_a_fork = true;
 	ft_usleep(1);
-	pthread_mutex_lock(philo->l_fork_mutex);
 	is_dead(philo);
+	if (philo->table->dead_detected)
+	{
+		pthread_mutex_unlock(philo->r_fork_mutex);
+		return;
+	}
+	pthread_mutex_lock(philo->l_fork_mutex);
 	philo->has_taken_a_fork = true;
 	printf("%ld %d has taken a fork\n", current_time(), philo->id);
 	philo->time_last_meal = current_time();
