@@ -73,25 +73,33 @@ void init_philos(t_table *table, char **argv)
 	}
 }
 
-void init_forks(t_philo *philos, int philo_num)
+int init_forks_mutex(t_philo *philos, int philo_num)
 {
 	int i;
 
 	for (i = 0; i < philo_num; i++)
 	{
-		philos[i].right_fork_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-		if (philos[i].right_fork_mutex == NULL)
-		{
-			exit_with_error(philos[i].table, "Malloc error for right fork mutex\n", ENOMEM);
-		}
-		pthread_mutex_init(philos[i].right_fork_mutex, NULL);
+		philos[i].fork_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+		if (philos[i].fork_mutex == NULL)
+			return (0);
+		pthread_mutex_init(philos[i].fork_mutex, NULL);
+	}
+	return (1);
+}
 
-		philos[i].left_fork_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-		if (philos[i].left_fork_mutex == NULL)
+void destroy_forks_mutex(t_philo *philos, int philo_num)
+{
+	int i;
+
+	i = 0;
+	while (i < philo_num)
+	{
+		if (philos[i].fork_mutex != NULL)
 		{
-			exit_with_error(philos[i].table, "Malloc error for left fork mutex\n", ENOMEM);
+			pthread_mutex_destroy(philos[i].fork_mutex);
+			free(philos[i].fork_mutex);
 		}
-		pthread_mutex_init(philos[i].left_fork_mutex, NULL);
+		i++;
 	}
 }
 
@@ -99,13 +107,16 @@ void init_mutex(t_table *table)
 {
 	pthread_mutex_init(&table->meals_mutex, NULL);
 	pthread_mutex_init(&table->print_mutex, NULL);
-	init_forks(table->philo, table->num_of_philos);
+	if (!init_forks_mutex(table->philo, table->num_of_philos))
+	{
+		destroy_mutex(table);
+		exit_with_error(table, "Malloc error at init fork mutex\n", ENOMEM);
+	}
 }
 
 void destroy_mutex(t_table *table)
 {
 	pthread_mutex_destroy(&table->meals_mutex);
 	pthread_mutex_destroy(&table->print_mutex);
-	pthread_mutex_destroy(table->philo->right_fork_mutex);
-	pthread_mutex_destroy(table->philo->left_fork_mutex);
+	destroy_forks_mutex(table->philo, table->num_of_philos);
 }

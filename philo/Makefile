@@ -1,13 +1,13 @@
 NAME	= philo
 CC		= cc
-CFLAGS	= -Werror -Wall -Wextra -pthread -g3
+CFLAGS	= -Werror -Wall -Wextra -pthread
 
 SRC_PATH = sources/
 OBJ_PATH = objects/
 
 SRC		=	main.c \
 			init.c \
-			exit.c \
+			error.c \
 			utils.c \
 		    lib1.c \
 		    lib2.c \
