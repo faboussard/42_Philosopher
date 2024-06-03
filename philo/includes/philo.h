@@ -83,6 +83,10 @@ void *routine(void *data);
 void init_mutex(t_table *table);
 void destroy_mutex(t_table *table);
 void wait_threads(t_table *table);
+bool is_dead(t_philo *philo);
+void print_msg(t_philo *philo, char *msg);
+int eat(t_philo *philo);
+
 
 
 #endif //PHILO_H

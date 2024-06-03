@@ -14,7 +14,8 @@ SRC		=	main.c \
 		    free.c \
 		    thread.c \
 		    mutex.c \
-		    routine.c
+		    routine.c \
+		    eat.c
 
 SRCS	= $(addprefix $(SRC_PATH), $(SRC))
 OBJ		= $(SRC:.c=.o)
