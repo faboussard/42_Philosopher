@@ -30,15 +30,14 @@ typedef pthread_mutex_t		t_mutex;
 typedef struct s_table
 {
 	int 			num_of_philos;
+	pthread_mutex_t *forks;
 	size_t			start_time;
 	bool	 		dead_detected;
-	t_mutex			death_mutex;
-	unsigned int	meals;
-	t_mutex			meals_mutex;
-	t_mutex			threads_created_mutex;
+	t_mutex			death_detected_mutex;
 	bool			threads_created;
+	t_mutex			threads_created_mutex;
 	pthread_t		*threads;
-	pthread_mutex_t *forks;
+	t_mutex			print_mutex;
 	t_philo 		*philo;
 }				t_table;
 
@@ -48,10 +47,12 @@ typedef struct s_philo
 	bool			has_taken_a_fork;
 	bool 			dead_flag;
 	size_t 			time_to_die;
+	t_mutex 		time_to_die_mutex;
 	size_t 			time_to_eat;
 	size_t 			time_to_sleep;
 	size_t 			number_of_meals;
 	size_t 			time_last_meal;
+	t_mutex 		last_meal_mutex;
 	t_mutex 		*r_fork_mutex;
 	t_mutex 		*l_fork_mutex;
 	t_table 		*table;
@@ -81,6 +82,7 @@ void *routine(void *data);
 void init_mutex(t_table *table);
 void destroy_mutex(t_table *table);
 void wait_threads(t_table *table);
+void print_msg(t_philo *philo, char *msg);
 
 
 #endif //PHILO_H
