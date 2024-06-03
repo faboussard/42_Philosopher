@@ -45,7 +45,6 @@ typedef struct s_philo
 {
 	unsigned		id;
 	bool			has_taken_a_fork;
-	bool 			dead_flag;
 	size_t 			time_to_die;
 	size_t 			time_to_eat;
 	size_t 			time_to_sleep;
@@ -82,7 +81,6 @@ void *routine(void *data);
 void init_mutex(t_table *table);
 void destroy_mutex(t_table *table);
 void wait_threads(t_table *table);
-void print_msg(t_philo *philo, char *msg);
 
 
 #endif //PHILO_H
