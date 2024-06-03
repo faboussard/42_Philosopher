@@ -32,6 +32,7 @@ typedef struct s_table
 	int 			num_of_philos;
 	t_mutex			*forks;
 	size_t			start_time;
+	t_mutex			start_time_mutex;
 	bool	 		dead_detected;
 	t_mutex			death_detected_mutex;
 	bool			threads_created;
@@ -49,6 +50,7 @@ typedef struct s_philo
 	size_t 			time_to_eat;
 	size_t 			time_to_sleep;
 	size_t 			number_of_meals;
+	t_mutex 		number_of_meals_mutex;
 	size_t 			time_last_meal;
 	t_mutex 		last_meal_mutex;
 	t_mutex 		*r_fork_mutex;

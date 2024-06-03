@@ -38,13 +38,23 @@ int init_forks_mutex(t_table *table)
 
 void init_mutex(t_table *table)
 {
+	int i;
+
+	i = 0;
 	pthread_mutex_init(&table->threads_created_mutex, NULL);
+	pthread_mutex_init(&table->start_time_mutex, NULL);
 	pthread_mutex_init(&table->print_mutex, NULL);
 	pthread_mutex_init(&table->death_detected_mutex, NULL);
 	if (!init_forks_mutex(table))
 	{
 		destroy_mutex(table);
 		error_free_exit(table, "Error initializing fork mutexes\n", ENOMEM);
+	}
+	while (i < table->num_of_philos)
+	{
+		pthread_mutex_init(&table->philo[i].last_meal_mutex, NULL);
+		pthread_mutex_init(&table->philo[i].number_of_meals_mutex, NULL);
+		i++;
 	}
 }
 
@@ -54,10 +64,12 @@ void destroy_mutex(t_table *table)
 
 	i = 0;
 	pthread_mutex_destroy(&table->threads_created_mutex);
+	pthread_mutex_destroy(&table->start_time_mutex);
 	pthread_mutex_destroy(&table->print_mutex);
 	pthread_mutex_destroy(&table->death_detected_mutex);
 	while (i < table->num_of_philos)
 	{
+		pthread_mutex_destroy(&table->philo[i].number_of_meals_mutex);
 		pthread_mutex_destroy(&table->philo[i].last_meal_mutex);
 		pthread_mutex_destroy(&table->forks[i]);
 		i++;
