@@ -59,7 +59,6 @@ void destroy_mutex(t_table *table)
 	while (i < table->num_of_philos)
 	{
 		pthread_mutex_destroy(&table->philo[i].last_meal_mutex);
-		pthread_mutex_destroy(&table->philo[i].time_to_die_mutex);
 		pthread_mutex_destroy(&table->forks[i]);
 		i++;
 	}

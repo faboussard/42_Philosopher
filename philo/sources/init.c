@@ -75,7 +75,6 @@ void init_philos(t_table *table, char **argv)
 //		if (table->philo[i].last_meal_mutex == NULL)
 //			error_free_exit(table, "Malloc error\n", ENOMEM);
 		pthread_mutex_init(&table->philo[i].last_meal_mutex, NULL);
-		pthread_mutex_init(&table->philo[i].time_to_die_mutex, NULL);
 		i++;
 	}
 }

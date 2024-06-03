@@ -16,36 +16,37 @@ int eat(t_philo *philo);
 
 bool is_dead(t_philo *philo)
 {
+	bool dead = false;
 	pthread_mutex_lock(&philo->table->death_detected_mutex);
-	pthread_mutex_lock(&philo->table->philo->time_to_die_mutex);
 	pthread_mutex_lock(&philo->last_meal_mutex);
-	if (!philo->table->dead_detected && (get_time_in_ms() - philo->time_last_meal) >= (get_time_in_ms() - philo->time_to_die))
+
+	size_t time_since_last_meal = get_time_in_ms() - philo->time_last_meal;
+	if (!philo->table->dead_detected && time_since_last_meal >= philo->time_to_die)
 	{
-		printf("LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa\n");
 		philo->table->dead_detected = true;
+		dead = true;
 		printf("%ld %d is dead\n", get_time_in_ms() - philo->table->start_time, philo->id + 1);
-		pthread_mutex_unlock(&philo->last_meal_mutex);
-		pthread_mutex_unlock(&philo->table->philo->time_to_die_mutex);
-		pthread_mutex_unlock(&philo->table->death_detected_mutex);
-		return (true);
 	}
+
 	pthread_mutex_unlock(&philo->last_meal_mutex);
-	pthread_mutex_unlock(&philo->table->philo->time_to_die_mutex);
 	pthread_mutex_unlock(&philo->table->death_detected_mutex);
-	return (false);
+	return dead;
 }
+
 
 void print_msg(t_philo *philo, char *msg)
 {
-	pthread_mutex_lock(&philo->last_meal_mutex);
-	printf("last meal %ld %d\n", get_time_in_ms() - philo->time_last_meal, philo->id + 1);
-	printf("time to die %ld %d\n", philo->time_to_die, philo->id + 1);
-	pthread_mutex_unlock(&philo->last_meal_mutex);
-	if (!is_dead(philo))
+	pthread_mutex_lock(&philo->table->death_detected_mutex);
+	if (!philo->table->dead_detected)
 	{
 		pthread_mutex_lock(&philo->table->print_mutex);
+		pthread_mutex_unlock(&philo->table->death_detected_mutex); // Déverrouiller avant d'imprimer pour éviter la contention
 		printf("%ld %d %s\n", get_time_in_ms() - philo->table->start_time, philo->id + 1, msg);
 		pthread_mutex_unlock(&philo->table->print_mutex);
+	}
+	else
+	{
+		pthread_mutex_unlock(&philo->table->death_detected_mutex);
 	}
 }
 
@@ -60,20 +61,48 @@ void *routine(void *pointer)
 //	{
 		if (philo->id % 2 == 0)
 			ft_usleep(1);
+		pthread_mutex_lock(&philo->table->death_detected_mutex);
+		if (philo->table->dead_detected == true)
+		{
+			pthread_mutex_unlock(&philo->table->death_detected_mutex);
+			return (pointer);
+		}
+		pthread_mutex_unlock(&philo->table->death_detected_mutex);
 		if (eat(philo) == 0)
 			return (pointer);
-//		printf("%d\n", 	philo->table->dead_detected);
+		printf("%d\n", 	philo->table->dead_detected);
 		print_msg(philo, "is sleeping");
-//	printf("%d\n", 	philo->table->dead_detected);
+	pthread_mutex_lock(&philo->table->death_detected_mutex);
+	if (philo->table->dead_detected == true)
+	{
+		pthread_mutex_unlock(&philo->table->death_detected_mutex);
+		return (pointer);
+	}
+	pthread_mutex_unlock(&philo->table->death_detected_mutex);
+	printf("%d\n", 	philo->table->dead_detected);
 		ft_usleep(philo->time_to_sleep);
-//	printf("%d\n", 	philo->table->dead_detected);
+	printf("%d\n", 	philo->table->dead_detected);
 		print_msg(philo, "is thinking");
+	pthread_mutex_lock(&philo->table->death_detected_mutex);
+	if (philo->table->dead_detected == true)
+	{
+		pthread_mutex_unlock(&philo->table->death_detected_mutex);
+		return (pointer);
+	}
+	pthread_mutex_unlock(&philo->table->death_detected_mutex);
 //	}
 	return (pointer);
 }
 
 int eat(t_philo *philo)
 {
+	pthread_mutex_lock(&philo->table->death_detected_mutex);
+	if (philo->table->dead_detected == true)
+	{
+		pthread_mutex_unlock(&philo->table->death_detected_mutex);
+		return (0);
+	}
+	pthread_mutex_unlock(&philo->table->death_detected_mutex);
 	pthread_mutex_lock(philo->r_fork_mutex);
 	if (is_dead(philo))
 	{
@@ -94,8 +123,8 @@ int eat(t_philo *philo)
 	print_msg(philo, "is eating");
 	pthread_mutex_lock(&philo->last_meal_mutex);
 	philo->time_last_meal = get_time_in_ms();
-	pthread_mutex_unlock(&philo->last_meal_mutex);
 	ft_usleep(philo->time_to_eat);
+	pthread_mutex_unlock(&philo->last_meal_mutex);
 	pthread_mutex_unlock(philo->r_fork_mutex);
 	pthread_mutex_unlock(philo->l_fork_mutex);
 	return (1);

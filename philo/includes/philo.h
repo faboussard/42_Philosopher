@@ -47,7 +47,6 @@ typedef struct s_philo
 	bool			has_taken_a_fork;
 	bool 			dead_flag;
 	size_t 			time_to_die;
-	t_mutex 		time_to_die_mutex;
 	size_t 			time_to_eat;
 	size_t 			time_to_sleep;
 	size_t 			number_of_meals;
