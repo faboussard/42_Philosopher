@@ -35,12 +35,10 @@ void wait_threads(t_table *table)
 
 void create_threads(t_table *table)
 {
-	unsigned int philos;
-	unsigned int i;
+	int i;
 
 	i = 0;
-	philos = table->num_of_philos;
-	while (i < philos)
+	while (i < table->num_of_philos)
 	{
 		if (pthread_create(&table->threads[i], NULL, &routine, (void *)&table->philo[i]) != 0)
 		{
@@ -49,10 +47,10 @@ void create_threads(t_table *table)
 		}
 		i++;
 	}
-//	pthread_mutex_lock(&table->threads_created_mutex);
+	pthread_mutex_lock(&table->threads_created_mutex);
 	table->threads_created = true;
 //	printf("%d\n", 	table->threads_created);
-//	pthread_mutex_unlock(&table->threads_created_mutex);
+	pthread_mutex_unlock(&table->threads_created_mutex);
 }
 
 void terminate_threads(t_table *table)

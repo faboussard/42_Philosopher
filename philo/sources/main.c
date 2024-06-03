@@ -32,8 +32,8 @@ void *routine(void *pointer)
 	t_philo *philo;
 
 	philo = (t_philo *) pointer;
-//	wait_threads(philo->table);
-//	philo->table->start_time = get_time_in_ms();
+	wait_threads(philo->table);
+	philo->table->start_time = get_time_in_ms();
 	if (is_dead(philo))
 		exit(0);
 	if (philo->id % 2 == 0)

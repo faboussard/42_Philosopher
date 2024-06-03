@@ -15,19 +15,10 @@
 
 void 	free_table(t_table *table)
 {
-	int i;
-
-	i = 0;
 	if (table == NULL)
 		return ;
 	if (table->philo)
 	{
-		while (i < table->num_of_philos)
-		{
-			free(table->philo[i].table);
-			table->philo[i].table = NULL;
-			i++;
-		}
 		free(table->forks);
 		table->forks = NULL;
 		free(table->philo);
