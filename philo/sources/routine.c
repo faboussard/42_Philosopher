@@ -12,25 +12,25 @@
 
 #include "philo.h"
 
-static void until_you_die(t_philo *philo)
+static void	until_you_die(t_philo *philo)
 {
 	while (true)
 	{
 		if (is_dead(philo))
-			return;
+			return ;
 		if (eat(philo) == 0)
-			return;
+			return ;
 		if (is_dead(philo))
-			return;
+			return ;
 		print_msg(philo, "is sleeping");
 		ft_usleep(philo->time_to_sleep);
 		if (is_dead(philo))
-			return;
+			return ;
 		print_msg(philo, "is thinking");
 	}
 }
 
-static void only_x_meals(t_philo *philo)
+static void	only_x_meals(t_philo *philo)
 {
 	while (true)
 	{
@@ -38,28 +38,28 @@ static void only_x_meals(t_philo *philo)
 		if (philo->number_of_meals == 0)
 		{
 			pthread_mutex_unlock(&philo->number_of_meals_mutex);
-			return;
+			return ;
 		}
 		philo->number_of_meals--;
 		pthread_mutex_unlock(&philo->number_of_meals_mutex);
 		if (is_dead(philo))
 			return ;
 		if (eat(philo) == 0)
-			return;
+			return ;
 		if (is_dead(philo))
-			return;
+			return ;
 		print_msg(philo, "is sleeping");
 		ft_usleep(philo->time_to_sleep);
 		if (is_dead(philo))
-			return;
+			return ;
 		print_msg(philo, "is thinking");
 	}
 }
 
-void *routine(void *pointer)
+void	*routine(void *pointer)
 {
-	t_philo *philo;
-	bool has_meals;
+	t_philo	*philo;
+	bool	has_meals;
 
 	philo = (t_philo *)pointer;
 	wait_threads(philo->table);
@@ -78,12 +78,13 @@ void *routine(void *pointer)
 	return (pointer);
 }
 
-void launch_party(t_table *table)
+void	launch_party(t_table *table)
 {
 	if (table->num_of_philos == 1)
 	{
 		table->start_time = get_time_in_ms();
-		printf("%ld %d is dead\n", get_time_in_ms() - table->start_time, table->philo->id + 1);
+		printf("%ld %d is dead\n", get_time_in_ms() - table->start_time,
+			table->philo->id + 1);
 		return ;
 	}
 	create_threads(table);

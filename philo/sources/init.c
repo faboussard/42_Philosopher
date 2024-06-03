@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-void init_table(char *const *argv, t_table **table)
+void	init_table(char *const *argv, t_table **table)
 {
 	*table = ft_calloc(1, sizeof(t_table));
 	if (!*table)
@@ -27,13 +27,14 @@ void init_table(char *const *argv, t_table **table)
 int	valid_args(int argc, char **argv)
 {
 	size_t	i;
-	int	nb_arg;
+	int		nb_arg;
 
 	i = 0;
 	nb_arg = argc - 1;
 	while (nb_arg > 0)
 	{
-		if (ft_atol(argv[nb_arg]) < 0 || ft_atol(argv[nb_arg]) > INT_MAX || ft_atol(argv[nb_arg]) < INT_MIN)
+		if (ft_atol(argv[nb_arg]) < 0 || ft_atol(argv[nb_arg]) > INT_MAX
+			|| ft_atol(argv[nb_arg]) < INT_MIN)
 			return (false);
 		while (argv[nb_arg][i])
 		{
@@ -47,10 +48,10 @@ int	valid_args(int argc, char **argv)
 	return (true);
 }
 
-void init_philos(t_table *table, char **argv)
+void	init_philos(t_table *table, char **argv)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	table->philo = ft_calloc(table->num_of_philos, sizeof(t_philo));

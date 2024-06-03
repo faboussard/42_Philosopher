@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-void wait_threads(t_table *table)
+void	wait_threads(t_table *table)
 {
 	pthread_mutex_lock(&table->threads_created_mutex);
 	while (table->threads_created == false)
@@ -23,14 +23,15 @@ void wait_threads(t_table *table)
 	pthread_mutex_unlock(&table->threads_created_mutex);
 }
 
-void create_threads(t_table *table)
+void	create_threads(t_table *table)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < table->num_of_philos)
 	{
-		if (pthread_create(&table->threads[i], NULL, &routine, (void *)&table->philo[i]) != 0)
+		if (pthread_create(&table->threads[i], NULL, &routine,
+				(void *)&table->philo[i]) != 0)
 		{
 			ft_putendl_fd("Failed to create thread", STDERR_FILENO);
 			return ;
@@ -42,10 +43,10 @@ void create_threads(t_table *table)
 	pthread_mutex_unlock(&table->threads_created_mutex);
 }
 
-void terminate_threads(t_table *table)
+void	terminate_threads(t_table *table)
 {
-	unsigned int philos;
-	unsigned int i;
+	unsigned int	philos;
+	unsigned int	i;
 
 	i = 0;
 	philos = table->num_of_philos;
@@ -54,7 +55,7 @@ void terminate_threads(t_table *table)
 		if (pthread_join(table->threads[i], NULL) != 0)
 		{
 			ft_putendl_fd("Failed to liberate thread", STDERR_FILENO);
-			return;
+			return ;
 		}
 		i++;
 	}

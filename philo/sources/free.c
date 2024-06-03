@@ -10,23 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "philo.h"
 
-void 	free_table(t_table *table)
+void	free_table(t_table *table)
 {
-	int i;
-
-	i = 0;
 	if (table == NULL)
 		return ;
 	if (table->philo)
 	{
-//		while (i < table->num_of_philos)
-//		{
-//			free(table->philo[i].last_meal_mutex);
-//			i++;
-//		}
 		free(table->forks);
 		table->forks = NULL;
 		free(table->philo);

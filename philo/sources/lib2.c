@@ -22,11 +22,6 @@ size_t	ft_strlen(const char *string)
 	return (i);
 }
 
-void	ft_putstr_fd(const char *s, int fd)
-{
-	write(fd, s, ft_strlen(s));
-}
-
 void	ft_putendl_fd(const char *s, int fd)
 {
 	char	*str;
@@ -43,7 +38,6 @@ void	ft_putendl_fd(const char *s, int fd)
 		free(str);
 	}
 }
-
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
@@ -73,8 +67,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (new_string);
 }
 
-
-
 void	*ft_bzero(void *s, size_t n)
 {
 	memset(s, 0, n);
@@ -102,4 +94,3 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	ft_bzero(ptr, total_size);
 	return (ptr);
 }
-

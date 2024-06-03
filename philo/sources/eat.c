@@ -12,7 +12,8 @@
 
 #include "philo.h"
 
-static void get_first_and_second_fork(t_philo *philo, t_mutex **first_fork, t_mutex **second_fork)
+static void	get_first_and_second_fork(t_philo *philo, t_mutex **first_fork,
+		t_mutex **second_fork)
 {
 	if (philo->id % 2 == 0)
 	{
@@ -26,17 +27,17 @@ static void get_first_and_second_fork(t_philo *philo, t_mutex **first_fork, t_mu
 	}
 }
 
-static bool take_forks(t_philo *philo)
+static bool	take_forks(t_philo *philo)
 {
-	t_mutex *first_fork;
-	t_mutex *second_fork;
+	t_mutex	*first_fork;
+	t_mutex	*second_fork;
 
 	get_first_and_second_fork(philo, &first_fork, &second_fork);
 	pthread_mutex_lock(first_fork);
 	if (is_dead(philo))
 	{
 		pthread_mutex_unlock(first_fork);
-		return false;
+		return (false);
 	}
 	print_msg(philo, "has taken a fork");
 	pthread_mutex_lock(second_fork);
@@ -44,15 +45,16 @@ static bool take_forks(t_philo *philo)
 	{
 		pthread_mutex_unlock(second_fork);
 		pthread_mutex_unlock(first_fork);
-		return false;
+		return (false);
 	}
 	print_msg(philo, "has taken a fork");
-	return true;
+	return (true);
 }
 
-static void release_forks(t_philo *philo)
+static void	release_forks(t_philo *philo)
 {
-	pthread_mutex_t *first_fork, *second_fork;
+	t_mutex	*first_fork;
+	t_mutex	*second_fork;
 
 	if (philo->id % 2 == 0)
 	{
@@ -64,27 +66,21 @@ static void release_forks(t_philo *philo)
 		first_fork = philo->l_fork_mutex;
 		second_fork = philo->r_fork_mutex;
 	}
-
 	pthread_mutex_unlock(second_fork);
 	pthread_mutex_unlock(first_fork);
 }
 
-
-int eat(t_philo *philo)
+int	eat(t_philo *philo)
 {
 	if (!take_forks(philo))
 	{
-		return 0;
+		return (0);
 	}
-
 	print_msg(philo, "is eating");
-
 	pthread_mutex_lock(&philo->last_meal_mutex);
 	philo->time_last_meal = get_time_in_ms();
 	ft_usleep(philo->time_to_eat);
 	pthread_mutex_unlock(&philo->last_meal_mutex);
-
 	release_forks(philo);
-
-	return 1;
+	return (1);
 }

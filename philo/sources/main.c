@@ -12,9 +12,9 @@
 
 #include "philo.h"
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_table *table;
+	t_table	*table;
 
 	table = NULL;
 	if ((argc != 5 && argc != 6) || !valid_args(argc, argv))

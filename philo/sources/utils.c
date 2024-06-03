@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "philo.h"
 
 size_t	get_time_in_ms(void)
@@ -31,10 +30,10 @@ void	ft_usleep(size_t time_in_ms)
 		usleep(time_in_ms / 10);
 }
 
-bool is_dead(t_philo *philo)
+bool	is_dead(t_philo *philo)
 {
-	bool dead;
-	size_t time_since_last_meal;
+	bool	dead;
+	size_t	time_since_last_meal;
 
 	dead = false;
 	pthread_mutex_lock(&philo->table->death_detected_mutex);
@@ -51,14 +50,15 @@ bool is_dead(t_philo *philo)
 	{
 		philo->table->dead_detected = true;
 		dead = true;
-		printf("%ld %d is dead\n", get_time_in_ms() - philo->table->start_time, philo->id + 1);
+		printf("%ld %d is dead\n", get_time_in_ms() - philo->table->start_time,
+			philo->id + 1);
 	}
 	pthread_mutex_unlock(&philo->last_meal_mutex);
 	pthread_mutex_unlock(&philo->table->death_detected_mutex);
 	return (dead);
 }
 
-void print_msg(t_philo *philo, char *msg)
+void	print_msg(t_philo *philo, char *msg)
 {
 	pthread_mutex_lock(&philo->table->death_detected_mutex);
 	if (!philo->table->dead_detected)
@@ -66,7 +66,8 @@ void print_msg(t_philo *philo, char *msg)
 		pthread_mutex_lock(&philo->table->print_mutex);
 		pthread_mutex_unlock(&philo->table->death_detected_mutex);
 		pthread_mutex_lock(&philo->table->start_time_mutex);
-		printf("%ld %d %s\n", get_time_in_ms() - philo->table->start_time, philo->id + 1, msg);
+		printf("%ld %d %s\n", get_time_in_ms() - philo->table->start_time,
+			philo->id + 1, msg);
 		pthread_mutex_unlock(&philo->table->start_time_mutex);
 		pthread_mutex_unlock(&philo->table->print_mutex);
 	}

@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "philo.h"
 
 static int	ft_sign(const char *string)
@@ -29,8 +28,8 @@ static const char	*ft_whitespace(const char *string)
 
 	i = 0;
 	while (*(string + i) == ' ' || *(string + i) == '\n' || *(string
-															  + i) == '\t' || *(string + i) == '\v' || *(string + i) == '\r'
-		   || *(string + i) == '\f')
+			+ i) == '\t' || *(string + i) == '\v' || *(string + i) == '\r'
+		|| *(string + i) == '\f')
 		i++;
 	return (string + i);
 }
@@ -62,7 +61,6 @@ int	ft_isdigit(char c)
 	return (c >= '0' && c <= '9');
 }
 
-
 long	ft_atol(const char *s)
 {
 	long	result;
@@ -71,7 +69,7 @@ long	ft_atol(const char *s)
 	result = 0;
 	sign = 1;
 	while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r' || *s == '\f'
-		   || *s == '\v')
+		|| *s == '\v')
 		s++;
 	if (*s == '-' || *s == '+')
 	{
