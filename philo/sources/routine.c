@@ -21,9 +21,16 @@ bool is_dead(t_philo *philo)
 
 	dead = false;
 	pthread_mutex_lock(&philo->table->death_detected_mutex);
+	if (philo->table->dead_detected)
+	{
+		pthread_mutex_unlock(&philo->table->death_detected_mutex);
+		return (true);
+	}
+	pthread_mutex_unlock(&philo->table->death_detected_mutex);
+	pthread_mutex_lock(&philo->table->death_detected_mutex);
 	pthread_mutex_lock(&philo->last_meal_mutex);
 	time_since_last_meal = get_time_in_ms() - philo->time_last_meal;
-	if (!philo->table->dead_detected && (time_since_last_meal >= philo->time_to_die))
+	if (time_since_last_meal >= philo->time_to_die)
 	{
 		philo->table->dead_detected = true;
 		dead = true;
@@ -59,13 +66,8 @@ void *routine(void *pointer)
 		ft_usleep(1);
 	while (true)
 	{
-		pthread_mutex_lock(&philo->table->death_detected_mutex);
-		if (philo->table->dead_detected)
-		{
-			pthread_mutex_unlock(&philo->table->death_detected_mutex);
+		if (is_dead(philo))
 			break;
-		}
-		pthread_mutex_unlock(&philo->table->death_detected_mutex);
 		if (eat(philo) == 0)
 			break;
 		if (is_dead(philo))
