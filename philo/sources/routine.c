@@ -34,7 +34,6 @@ bool is_dead(t_philo *philo)
 	return (dead);
 }
 
-
 void print_msg(t_philo *philo, char *msg)
 {
 	pthread_mutex_lock(&philo->table->death_detected_mutex);
@@ -46,20 +45,18 @@ void print_msg(t_philo *philo, char *msg)
 		pthread_mutex_unlock(&philo->table->print_mutex);
 	}
 	else
-	{
 		pthread_mutex_unlock(&philo->table->death_detected_mutex);
-	}
 }
 
 void *routine(void *pointer)
 {
-	t_philo *philo = (t_philo *)pointer;
+	t_philo *philo;
+
+	philo = (t_philo *)pointer;
 	wait_threads(philo->table);
 	philo->table->start_time = get_time_in_ms();
-
 	if (philo->id % 2 == 0)
 		ft_usleep(1);
-
 	while (true)
 	{
 		pthread_mutex_lock(&philo->table->death_detected_mutex);
@@ -71,8 +68,12 @@ void *routine(void *pointer)
 		pthread_mutex_unlock(&philo->table->death_detected_mutex);
 		if (eat(philo) == 0)
 			break;
+		if (is_dead(philo))
+			break;
 		print_msg(philo, "is sleeping");
 		ft_usleep(philo->time_to_sleep);
+		if (is_dead(philo))
+			break;
 		print_msg(philo, "is thinking");
 	}
 	return (pointer);
@@ -88,7 +89,6 @@ int eat(t_philo *philo)
 		return 0;
 	}
 	print_msg(philo, "has taken a fork");
-
 	pthread_mutex_lock(philo->l_fork_mutex);
 	if (is_dead(philo))
 	{
@@ -98,12 +98,10 @@ int eat(t_philo *philo)
 	}
 	print_msg(philo, "has taken a fork");
 	print_msg(philo, "is eating");
-
 	pthread_mutex_lock(&philo->last_meal_mutex);
 	philo->time_last_meal = get_time_in_ms();
 	ft_usleep(philo->time_to_eat);
 	pthread_mutex_unlock(&philo->last_meal_mutex);
-
 	pthread_mutex_unlock(philo->r_fork_mutex);
 	pthread_mutex_unlock(philo->l_fork_mutex);
 	return 1;
