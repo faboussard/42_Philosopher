@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-void until_you_die(t_philo *philo)
+static void until_you_die(t_philo *philo)
 {
 	while (true)
 	{
@@ -30,7 +30,7 @@ void until_you_die(t_philo *philo)
 	}
 }
 
-void only_x_meals(t_philo *philo)
+static void only_x_meals(t_philo *philo)
 {
 	while (true)
 	{
@@ -41,7 +41,6 @@ void only_x_meals(t_philo *philo)
 			return;
 		}
 		philo->number_of_meals--;
-		printf("%zu\n", 	philo->number_of_meals);
 		pthread_mutex_unlock(&philo->number_of_meals_mutex);
 		if (is_dead(philo))
 			return ;
@@ -62,7 +61,6 @@ void *routine(void *pointer)
 	t_philo *philo;
 	bool has_meals;
 
-	has_meals = 1;
 	philo = (t_philo *)pointer;
 	wait_threads(philo->table);
 	pthread_mutex_lock(&philo->table->start_time_mutex);
@@ -76,7 +74,7 @@ void *routine(void *pointer)
 	if (has_meals)
 		only_x_meals(philo);
 	else
-until_you_die(philo);
+		until_you_die(philo);
 	return (pointer);
 }
 
