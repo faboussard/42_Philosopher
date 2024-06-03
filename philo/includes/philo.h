@@ -30,7 +30,7 @@ typedef pthread_mutex_t		t_mutex;
 typedef struct s_table
 {
 	int 			num_of_philos;
-	pthread_mutex_t *forks;
+	t_mutex			*forks;
 	size_t			start_time;
 	bool	 		dead_detected;
 	t_mutex			death_detected_mutex;
@@ -54,6 +54,7 @@ typedef struct s_philo
 	t_mutex 		last_meal_mutex;
 	t_mutex 		*r_fork_mutex;
 	t_mutex 		*l_fork_mutex;
+	t_mutex			fork_mutex;
 	t_table 		*table;
 }				t_philo;
 

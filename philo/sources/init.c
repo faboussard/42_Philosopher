@@ -71,9 +71,6 @@ void init_philos(t_table *table, char **argv)
 		if (argv[j])
 			table->philo[i].number_of_meals = ft_atoi(argv[j]);
 		table->philo[i].time_last_meal = get_time_in_ms();
-//		table->philo[i].last_meal_mutex = malloc(sizeof(pthread_mutex_t));
-//		if (table->philo[i].last_meal_mutex == NULL)
-//			error_free_exit(table, "Malloc error\n", ENOMEM);
 		pthread_mutex_init(&table->philo[i].last_meal_mutex, NULL);
 		i++;
 	}
