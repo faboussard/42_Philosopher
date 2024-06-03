@@ -24,6 +24,7 @@ static bool is_dead(t_philo *philo)
 	pthread_mutex_unlock(&philo->table->death_detected_mutex);
 	pthread_mutex_lock(&philo->last_meal_mutex);
 	time_since_last_meal = get_time_in_ms() - philo->time_last_meal;
+	printf("%ld %d is dead\n", get_time_in_ms() - philo->table->start_time, philo->id + 1);
 	if (time_since_last_meal >= philo->time_to_die)
 	{
 		pthread_mutex_lock(&philo->table->death_detected_mutex);
@@ -77,16 +78,30 @@ static int eat(t_philo *philo)
 	return (1);
 }
 
-void *routine(void *pointer)
+void eat_until_you_die(t_philo *philo)
 {
-	t_philo *philo;
-
-	philo = (t_philo *)pointer;
-	wait_threads(philo->table);
-	philo->table->start_time = get_time_in_ms();
-	if (philo->id % 2 == 0)
-		ft_usleep(1);
 	while (true)
+	{
+		if (is_dead(philo) == 1)
+			return ;
+		if (eat(philo) == 0)
+			return ;
+		if (is_dead(philo) == 1)
+			return ;
+		print_msg(philo, "is sleeping");
+		ft_usleep(philo->time_to_sleep);
+		if (is_dead(philo) == 1)
+			return ;
+		print_msg(philo, "is thinking");
+	}
+}
+
+void eat_your_meals(t_philo *philo)
+{
+	size_t i;
+
+	i = 0;
+	while (i < philo->number_of_meals)
 	{
 		if (is_dead(philo) == 1)
 			break ;
@@ -98,6 +113,35 @@ void *routine(void *pointer)
 		ft_usleep(philo->time_to_sleep);
 		if (is_dead(philo) == 1)
 			break;
+		print_msg(philo, "is thinking");
+		i++;
+	}
+}
+
+void *routine(void *pointer)
+{
+	t_philo *philo;
+
+	philo = (t_philo *)pointer;
+	wait_threads(philo->table);
+	philo->table->start_time = get_time_in_ms();
+	if (philo->id % 2 == 0)
+		ft_usleep(1);
+//	if (philo->number_of_meals > 0)
+//		eat_your_meals(philo);
+//	else
+	while (true)
+	{
+		if (is_dead(philo) == 1)
+			break;
+		if (eat(philo) == 0)
+			break ;
+		if (is_dead(philo) == 1)
+			break ;
+		print_msg(philo, "is sleeping");
+		ft_usleep(philo->time_to_sleep);
+		if (is_dead(philo) == 1)
+			break ;
 		print_msg(philo, "is thinking");
 	}
 	return (pointer);
