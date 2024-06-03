@@ -58,7 +58,7 @@ void eat(t_philo *philo)
 	pthread_mutex_lock(philo->r_fork_mutex);
 	printf("%ld %d has taken a fork\n", get_time_in_ms() - philo->table->start_time, philo->id + 1);
 	philo->has_taken_a_fork = true;
-	ft_usleep(1);
+//	ft_usleep(1);
 	if (is_dead(philo))
 		exit(0);
 	if (philo->table->dead_detected)

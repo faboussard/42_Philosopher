@@ -14,24 +14,14 @@
 
 void wait_threads(t_table *table)
 {
-	while (1)
+	pthread_mutex_lock(&table->threads_created_mutex);
+	while (table->threads_created == false)
 	{
-		pthread_mutex_lock(&table->threads_created_mutex);
-//		printf("%d\n", 	table->threads_created);
-//		pthread_mutex_lock(&table->threads_created_mutex);
-		if (table->threads_created)
-		{
-//			pthread_mutex_unlock(&table->threads_created_mutex);
-			break;
-		}
-//		pthread_mutex_unlock(&table->threads_created_mutex);
-		// Eviter un spinlock trop agressif
 		pthread_mutex_unlock(&table->threads_created_mutex);
-		usleep(100);  // Attendre 100 microsecondes
+		pthread_mutex_lock(&table->threads_created_mutex);
 	}
-
+	pthread_mutex_unlock(&table->threads_created_mutex);
 }
-
 
 void create_threads(t_table *table)
 {
@@ -49,7 +39,6 @@ void create_threads(t_table *table)
 	}
 	pthread_mutex_lock(&table->threads_created_mutex);
 	table->threads_created = true;
-//	printf("%d\n", 	table->threads_created);
 	pthread_mutex_unlock(&table->threads_created_mutex);
 }
 
