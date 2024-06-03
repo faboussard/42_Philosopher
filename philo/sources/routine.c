@@ -32,10 +32,17 @@ void until_you_die(t_philo *philo)
 
 void only_x_meals(t_philo *philo)
 {
-	int i = 0;
-	while (i < 5)
+	while (true)
 	{
-//		pthread_mutex_unlock(&philo->number_of_meals_mutex);
+		pthread_mutex_lock(&philo->number_of_meals_mutex);
+		if (philo->number_of_meals == 0)
+		{
+			pthread_mutex_unlock(&philo->number_of_meals_mutex);
+			return;
+		}
+		philo->number_of_meals--;
+		printf("%zu\n", 	philo->number_of_meals);
+		pthread_mutex_unlock(&philo->number_of_meals_mutex);
 		if (is_dead(philo))
 			return ;
 		if (eat(philo) == 0)
@@ -47,19 +54,15 @@ void only_x_meals(t_philo *philo)
 		if (is_dead(philo))
 			return;
 		print_msg(philo, "is thinking");
-//		pthread_mutex_lock(&philo->number_of_meals_mutex);
-//		philo->number_of_meals--;
-//		pthread_mutex_unlock(&philo->number_of_meals_mutex);
-i++;
 	}
 }
 
 void *routine(void *pointer)
 {
 	t_philo *philo;
-//	bool has_meals;
+	bool has_meals;
 
-//	has_meals = 1;
+	has_meals = 1;
 	philo = (t_philo *)pointer;
 	wait_threads(philo->table);
 	pthread_mutex_lock(&philo->table->start_time_mutex);
@@ -67,13 +70,12 @@ void *routine(void *pointer)
 	pthread_mutex_unlock(&philo->table->start_time_mutex);
 	if (philo->id % 2 == 0)
 		ft_usleep(1);
-//	pthread_mutex_lock(&philo->number_of_meals_mutex);
-//	has_meals = philo->number_of_meals > 0;
-//	printf("%d\n", has_meals);
-//	pthread_mutex_unlock(&philo->number_of_meals_mutex);
-//	if (has_meals)
-//		only_x_meals(philo);
-//	else
+	pthread_mutex_lock(&philo->number_of_meals_mutex);
+	has_meals = philo->number_of_meals > 0;
+	pthread_mutex_unlock(&philo->number_of_meals_mutex);
+	if (has_meals)
+		only_x_meals(philo);
+	else
 until_you_die(philo);
 	return (pointer);
 }
