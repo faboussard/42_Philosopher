@@ -22,7 +22,7 @@ void 	free_table(t_table *table)
 		return ;
 	if (table->philo)
 	{
-		while (table->philo[i].table)
+		while (i < table->num_of_philos)
 		{
 			free(table->philo[i].table);
 			table->philo[i].table = NULL;
