@@ -16,7 +16,7 @@ void init_table(char *const *argv, t_table **table)
 {
 	*table = ft_calloc(1, sizeof(t_table));
 	if (!*table)
-		exit_with_error(NULL, "Malloc error\n", ENOMEM);
+		error_free_exit(NULL, "Malloc error\n", ENOMEM);
 	ft_bzero(*table, sizeof(t_table));
 	(*table)->num_of_philos = ft_atoi(argv[1]);
 }
@@ -56,20 +56,14 @@ void init_philos(t_table *table, char **argv)
 	if (table->philo == NULL)
 	{
 		free(table);
-		exit_with_error(table, "Malloc error\n", ENOMEM);
+		error_free_exit(table, "Malloc error\n", ENOMEM);
 	}
 	while (i < num_of_philos)
 	{
 		j = 2;
 		table->philo[i].table = (t_table *)malloc(sizeof(t_table));
 		if (table->philo[i].table == NULL)
-		{
-			for (unsigned int j = 0; j < i; j++)
-				free(table->philo[j].table);
-			free(table->philo);
-			free(table);
-			exit_with_error(table, "Malloc error\n", ENOMEM);
-		}
+			error_free_exit(table, "Malloc error\n", ENOMEM);
 		table->philo[i].id = i;
 		table->philo[i].has_taken_a_fork = false;
 		table->philo[i].time_to_die = ft_atoi(argv[j++]);
@@ -77,7 +71,7 @@ void init_philos(t_table *table, char **argv)
 		table->philo[i].time_to_sleep = ft_atoi(argv[j++]);
 		if (argv[j])
 			table->philo[i].number_of_meals = ft_atoi(argv[j]);
-		table->philo[i].time_last_meal = current_time();
+		table->philo[i].time_last_meal = get_time_in_ms();
 		i++;
 	}
 }
@@ -87,21 +81,25 @@ int init_forks_mutex(t_table *table)
 	int i;
 	int philo_num;
 
+	i = 0;
 	philo_num = table->num_of_philos;
 	table->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * philo_num);
 	if (table->forks == NULL)
 		return 0;
-	for (i = 0; i < philo_num; i++)
+	while (i < philo_num)
 	{
 		if (pthread_mutex_init(&table->forks[i], NULL) != 0)
 			return 0;
+		i++;
 	}
-	for (i = 0; i < philo_num; i++)
+	i = 0;
+	while (i < philo_num)
 	{
 		table->philo[i].l_fork_mutex = &table->forks[i];
 		table->philo[i].r_fork_mutex = &table->forks[(i + 1) % philo_num];
+		i++;
 	}
-	return 1;
+	return (1);
 }
 
 
@@ -128,21 +126,21 @@ int init_forks_mutex(t_table *table)
 
 void init_mutex(t_table *table)
 {
+	pthread_mutex_init(&table->threads_created_mutex, NULL);
 	pthread_mutex_init(&table->death_mutex, NULL);
 	if (!init_forks_mutex(table))
 	{
 		destroy_mutex(table);
-		exit_with_error(table, "Error initializing fork mutexes\n", ENOMEM);
+		error_free_exit(table, "Error initializing fork mutexes\n", ENOMEM);
 	}
 }
 
-
 void destroy_mutex(t_table *table)
 {
+	pthread_mutex_destroy(&table->threads_created_mutex);
 	pthread_mutex_destroy(&table->death_mutex);
 	for (int i = 0; i < table->num_of_philos; i++)
 	{
 		pthread_mutex_destroy(&table->forks[i]);
 	}
-	free(table->forks);
 }

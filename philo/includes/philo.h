@@ -30,10 +30,13 @@ typedef pthread_mutex_t		t_mutex;
 typedef struct s_table
 {
 	int 			num_of_philos;
+	size_t			start_time;
 	bool	 		dead_detected;
+	t_mutex			death_mutex;
 	unsigned int	meals;
 	t_mutex			meals_mutex;
-	t_mutex			death_mutex;
+	t_mutex			threads_created_mutex;
+	bool			threads_created;
 	pthread_mutex_t *forks;
 	t_philo 		*philo;
 }				t_table;
@@ -66,8 +69,8 @@ void	ft_putendl_fd(const char *s, int fd);
 char	*ft_strjoin(char const *s1, char const *s2);
 void 	free_table(t_table *table);
 void init_table(char *const *argv, t_table **table);
-size_t	current_time(void);
-void exit_with_error(t_table *table, char const *error_msg, int error_code);
+size_t	get_time_in_ms(void);
+void error_free_exit(t_table *table, char const *error_msg, int error_code);
 int	valid_args(int argc, char **argv);
 void create_threads(t_table *table);
 void terminate_threads(t_table *table);
@@ -76,6 +79,7 @@ void launch_party(t_table *table);
 void *routine(void *data);
 void init_mutex(t_table *table);
 void destroy_mutex(t_table *table);
+void wait_threads(t_table *table);
 
 
 #endif //PHILO_H

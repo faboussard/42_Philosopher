@@ -12,6 +12,23 @@
 
 #include "philo.h"
 
+void wait_threads(t_table *table)
+{
+	// Protéger l'accès à threads_created avec un mutex
+	pthread_mutex_lock(&table->threads_created_mutex);
+	while (table->threads_created == false)
+	{
+		;
+		pthread_mutex_unlock(&table->threads_created_mutex);
+		// Eviter un spinlock trop agressif
+		usleep(1);
+		pthread_mutex_lock(&table->threads_created_mutex);
+	}
+	pthread_mutex_unlock(&table->threads_created_mutex);
+
+	table->start_time = get_time_in_ms();
+}
+
 void create_threads(t_table *table)
 {
 	unsigned int philos;
@@ -20,7 +37,7 @@ void create_threads(t_table *table)
 	i = 0;
 	philos = table->num_of_philos;
 	pthread_t th[philos];
-	while (i < philos && !table->dead_detected)
+	while (i < philos)
 	{
 		if (pthread_create(th + i, NULL, &routine, (void *)&table->philo[i]) != 0)
 		{
@@ -29,6 +46,9 @@ void create_threads(t_table *table)
 		}
 		i++;
 	}
+//	pthread_mutex_lock(&table->threads_created_mutex);
+//	table->threads_created = true;
+//	pthread_mutex_unlock(&table->threads_created_mutex);
 }
 
 void terminate_threads(t_table *table)

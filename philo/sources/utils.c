@@ -13,7 +13,7 @@
 
 #include "philo.h"
 
-size_t	current_time(void)
+size_t	get_time_in_ms(void)
 {
 	struct timeval	tv;
 
@@ -26,7 +26,7 @@ void	ft_usleep(size_t time_in_ms)
 {
 	size_t	start_time;
 
-	start_time = current_time();
-	while ((current_time() - start_time) < time_in_ms)
+	start_time = get_time_in_ms();
+	while ((get_time_in_ms() - start_time) < time_in_ms)
 		usleep(time_in_ms / 10);
 }
