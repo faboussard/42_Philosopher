@@ -14,20 +14,24 @@
 
 void wait_threads(t_table *table)
 {
-	// Protéger l'accès à threads_created avec un mutex
-	pthread_mutex_lock(&table->threads_created_mutex);
-	while (table->threads_created == false)
+	while (1)
 	{
-		;
-		pthread_mutex_unlock(&table->threads_created_mutex);
-		// Eviter un spinlock trop agressif
-		usleep(1);
 		pthread_mutex_lock(&table->threads_created_mutex);
+//		printf("%d\n", 	table->threads_created);
+//		pthread_mutex_lock(&table->threads_created_mutex);
+		if (table->threads_created)
+		{
+//			pthread_mutex_unlock(&table->threads_created_mutex);
+			break;
+		}
+//		pthread_mutex_unlock(&table->threads_created_mutex);
+		// Eviter un spinlock trop agressif
+		pthread_mutex_unlock(&table->threads_created_mutex);
+		usleep(100);  // Attendre 100 microsecondes
 	}
-	pthread_mutex_unlock(&table->threads_created_mutex);
 
-	table->start_time = get_time_in_ms();
 }
+
 
 void create_threads(t_table *table)
 {
@@ -36,18 +40,18 @@ void create_threads(t_table *table)
 
 	i = 0;
 	philos = table->num_of_philos;
-	pthread_t th[philos];
 	while (i < philos)
 	{
-		if (pthread_create(th + i, NULL, &routine, (void *)&table->philo[i]) != 0)
+		if (pthread_create(&table->threads[i], NULL, &routine, (void *)&table->philo[i]) != 0)
 		{
 			ft_putendl_fd("Failed to create thread", STDERR_FILENO);
-			return;
+			return ;
 		}
 		i++;
 	}
 //	pthread_mutex_lock(&table->threads_created_mutex);
-//	table->threads_created = true;
+	table->threads_created = true;
+//	printf("%d\n", 	table->threads_created);
 //	pthread_mutex_unlock(&table->threads_created_mutex);
 }
 
@@ -58,11 +62,9 @@ void terminate_threads(t_table *table)
 
 	i = 0;
 	philos = table->num_of_philos;
-	pthread_t th[philos];
-
 	while (i < philos)
 	{
-		if (pthread_join(th[i], NULL) != 0)
+		if (pthread_join(table->threads[i], NULL) != 0)
 		{
 			ft_putendl_fd("Failed to liberate thread", STDERR_FILENO);
 			return;

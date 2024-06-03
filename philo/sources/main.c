@@ -33,6 +33,7 @@ void *routine(void *pointer)
 
 	philo = (t_philo *) pointer;
 //	wait_threads(philo->table);
+//	philo->table->start_time = get_time_in_ms();
 	if (is_dead(philo))
 		exit(0);
 	if (philo->id % 2 == 0)
@@ -77,6 +78,7 @@ void eat(t_philo *philo)
 
 void launch_party(t_table *table)
 {
+	table->start_time = get_time_in_ms();
 	if (table->num_of_philos == 1)
 	{
 		printf("%ld %d is dead\n", get_time_in_ms() - table->start_time, table->philo->id + 1);

@@ -37,6 +37,7 @@ typedef struct s_table
 	t_mutex			meals_mutex;
 	t_mutex			threads_created_mutex;
 	bool			threads_created;
+	pthread_t		*threads;
 	pthread_mutex_t *forks;
 	t_philo 		*philo;
 }				t_table;
