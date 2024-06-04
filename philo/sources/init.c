@@ -17,11 +17,11 @@ void	init_table(char *const *argv, t_table **table)
 	*table = ft_calloc(1, sizeof(t_table));
 	if (!*table)
 		error_free_exit(NULL, "Malloc error\n", ENOMEM);
-	ft_bzero(*table, sizeof(t_table));
+	//ft_bzero(*table, sizeof(t_table));
 	(*table)->num_of_philos = ft_atoi(argv[1]);
 	(*table)->threads = ft_calloc((*table)->num_of_philos, sizeof(pthread_t));
 	if ((*table)->threads == NULL)
-		error_free_exit(NULL, "Malloc error\n", ENOMEM);
+		error_free_exit(*table, "Malloc error\n", ENOMEM);
 }
 
 int	valid_args(int argc, char **argv)
@@ -56,10 +56,7 @@ void	init_philos(t_table *table, char **argv)
 	i = 0;
 	table->philo = ft_calloc(table->num_of_philos, sizeof(t_philo));
 	if (table->philo == NULL)
-	{
-		free(table);
 		error_free_exit(table, "Malloc error\n", ENOMEM);
-	}
 	while (i < table->num_of_philos)
 	{
 		j = 2;

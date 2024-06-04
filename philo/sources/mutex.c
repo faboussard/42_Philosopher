@@ -17,16 +17,12 @@ int	init_forks_mutex(t_table *table)
 	int	i;
 
 	i = 0;
-	table->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)
+	table->forks = malloc(sizeof(pthread_mutex_t)
 			* table->num_of_philos);
 	if (table->forks == NULL)
 		return (0);
 	while (i < table->num_of_philos)
-	{
-		if (pthread_mutex_init(&table->forks[i], NULL) != 0)
-			return (0);
-		i++;
-	}
+		pthread_mutex_init(&table->forks[i++], NULL);
 	i = 0;
 	while (i < table->num_of_philos)
 	{
