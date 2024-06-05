@@ -85,6 +85,7 @@ void	launch_party(t_table *table)
 		printf("0 %d died\n", table->philo->id + 1);
 		return ;
 	}
-	create_threads(table);
+	if (!create_threads(table))
+		return ;
 	terminate_threads(table, table->num_of_philos);
 }
