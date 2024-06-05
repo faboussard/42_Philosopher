@@ -26,7 +26,9 @@ void	wait_threads(t_table *table)
 void	create_threads(t_table *table)
 {
 	int	i;
+	int	j;
 
+	j = 0;
 	i = 0;
 	while (i < table->num_of_philos)
 	{
@@ -34,6 +36,8 @@ void	create_threads(t_table *table)
 				(void *)&table->philo[i]) != 0)
 		{
 			ft_putendl_fd("Failed to create thread", STDERR_FILENO);
+			while (j < i)
+				pthread_join(table->threads[j++], NULL);
 			return ;
 		}
 		i++;
@@ -53,10 +57,7 @@ void	terminate_threads(t_table *table)
 	while (i < philos)
 	{
 		if (pthread_join(table->threads[i], NULL) != 0)
-		{
 			ft_putendl_fd("Failed to liberate thread", STDERR_FILENO);
-			return ;
-		}
 		i++;
 	}
 }

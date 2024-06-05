@@ -50,7 +50,7 @@ bool	is_dead(t_philo *philo)
 	{
 		philo->table->dead_detected = true;
 		dead = true;
-		printf("%ld %d is dead\n", get_time_in_ms() - philo->table->start_time,
+		printf("%ld %d died\n", get_time_in_ms() - philo->table->start_time,
 			philo->id + 1);
 	}
 	pthread_mutex_unlock(&philo->last_meal_mutex);

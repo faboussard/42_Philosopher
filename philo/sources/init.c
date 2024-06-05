@@ -17,7 +17,6 @@ void	init_table(char *const *argv, t_table **table)
 	*table = ft_calloc(1, sizeof(t_table));
 	if (!*table)
 		error_free_exit(NULL, "Malloc error\n", ENOMEM);
-	//ft_bzero(*table, sizeof(t_table));
 	(*table)->num_of_philos = ft_atoi(argv[1]);
 	(*table)->threads = ft_calloc((*table)->num_of_philos, sizeof(pthread_t));
 	if ((*table)->threads == NULL)

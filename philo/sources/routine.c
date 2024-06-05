@@ -83,7 +83,7 @@ void	launch_party(t_table *table)
 	if (table->num_of_philos == 1)
 	{
 		table->start_time = get_time_in_ms();
-		printf("%ld %d is dead\n", get_time_in_ms() - table->start_time,
+		printf("%ld %d died\n", get_time_in_ms() - table->start_time,
 			table->philo->id + 1);
 		return ;
 	}

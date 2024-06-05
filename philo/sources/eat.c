@@ -47,6 +47,8 @@ static bool	take_forks(t_philo *philo)
 		pthread_mutex_unlock(first_fork);
 		return (false);
 	}
+	pthread_mutex_unlock(second_fork);
+	pthread_mutex_unlock(first_fork);
 	print_msg(philo, "has taken a fork");
 	return (true);
 }
@@ -73,9 +75,7 @@ static void	release_forks(t_philo *philo)
 int	eat(t_philo *philo)
 {
 	if (!take_forks(philo))
-	{
 		return (0);
-	}
 	print_msg(philo, "is eating");
 	pthread_mutex_lock(&philo->last_meal_mutex);
 	philo->time_last_meal = get_time_in_ms();
