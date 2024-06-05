@@ -86,5 +86,5 @@ void	launch_party(t_table *table)
 		return ;
 	}
 	create_threads(table);
-	terminate_threads(table);
+	terminate_threads(table, table->num_of_philos);
 }
