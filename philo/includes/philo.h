@@ -29,7 +29,7 @@ typedef pthread_mutex_t	t_mutex;
 
 typedef struct s_table
 {
-	int					num_of_philos;
+	unsigned int		num_of_philos;
 	t_mutex				*forks;
 	size_t				start_time;
 	t_mutex				start_time_mutex;

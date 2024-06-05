@@ -25,14 +25,14 @@ void	init_table(char *const *argv, t_table **table)
 
 int	valid_args(int argc, char **argv)
 {
-	size_t	i;
-	int		nb_arg;
+	unsigned int	i;
+	int				nb_arg;
 
 	i = 0;
 	nb_arg = argc - 1;
 	while (nb_arg > 0)
 	{
-		if (ft_atol(argv[nb_arg]) < 0 || ft_atol(argv[nb_arg]) > INT_MAX
+		if (ft_atol(argv[nb_arg]) <= 0 || ft_atol(argv[nb_arg]) > INT_MAX
 			|| ft_atol(argv[nb_arg]) < INT_MIN)
 			return (false);
 		while (argv[nb_arg][i])
@@ -49,8 +49,8 @@ int	valid_args(int argc, char **argv)
 
 void	init_philos(t_table *table, char **argv)
 {
-	int	i;
-	int	j;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
 	table->philo = ft_calloc(table->num_of_philos, sizeof(t_philo));

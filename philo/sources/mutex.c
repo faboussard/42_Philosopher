@@ -14,7 +14,7 @@
 
 int	init_forks_mutex(t_table *table)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
 	table->forks = malloc(sizeof(pthread_mutex_t)
@@ -36,7 +36,7 @@ int	init_forks_mutex(t_table *table)
 
 void	init_mutex(t_table *table)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
 	pthread_mutex_init(&table->threads_created_mutex, NULL);
@@ -58,7 +58,7 @@ void	init_mutex(t_table *table)
 
 void	destroy_mutex(t_table *table)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
 	pthread_mutex_destroy(&table->threads_created_mutex);
