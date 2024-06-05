@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faboussa <faboussa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,9 +12,8 @@
 
 #include "../includes/philo.h"
 
-void	error_free_exit(t_table *table, char const *error_msg, int error_code)
+void error_free(t_table *table, char const *error_msg)
 {
 	free_table(table);
 	ft_putendl_fd(error_msg, STDERR_FILENO);
-	exit(error_code);
 }

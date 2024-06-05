@@ -32,12 +32,15 @@ void	create_threads(t_table *table)
 	i = 0;
 	while (i < table->num_of_philos)
 	{
-		if (pthread_create(&table->threads[i], NULL, &routine,
+		if (pthread_create(&table->threads[i], NULL, &routine, // remplacer par philo->tid
 				(void *)&table->philo[i]) != 0)
 		{
 			ft_putendl_fd("Failed to create thread", STDERR_FILENO);
 			while (j < i)
-				pthread_join(table->threads[j++], NULL);
+			{
+				if (pthread_join(table->threads[j++], NULL) != 0)
+					ft_putendl_fd("Failed to liberate thread", STDERR_FILENO); // ajouter quel thread a plante
+			}
 			return ;
 		}
 		i++;

@@ -12,15 +12,22 @@
 
 #include "philo.h"
 
-void	init_table(char *const *argv, t_table **table)
+int init_table(char *const *argv, t_table **table)
 {
 	*table = ft_calloc(1, sizeof(t_table));
 	if (!*table)
-		error_free_exit(NULL, "Malloc error\n", ENOMEM);
+	{
+		error_free(NULL, "Malloc error\n");
+		return (0);
+	}
 	(*table)->num_of_philos = ft_atoi(argv[1]);
 	(*table)->threads = ft_calloc((*table)->num_of_philos, sizeof(pthread_t));
 	if ((*table)->threads == NULL)
-		error_free_exit(*table, "Malloc error\n", ENOMEM);
+	{
+		error_free(*table, "Malloc error\n");
+		return (0);
+	}
+	return (1);
 }
 
 int	valid_args(int argc, char **argv)
@@ -47,7 +54,7 @@ int	valid_args(int argc, char **argv)
 	return (true);
 }
 
-void	init_philos(t_table *table, char **argv)
+int init_philos(t_table *table, char **argv)
 {
 	size_t	i;
 	size_t	j;
@@ -55,7 +62,10 @@ void	init_philos(t_table *table, char **argv)
 	i = 0;
 	table->philo = ft_calloc(table->num_of_philos, sizeof(t_philo));
 	if (table->philo == NULL)
-		error_free_exit(table, "Malloc error\n", ENOMEM);
+	{
+		error_free(table, "Malloc error\n");
+		return (0);
+	}
 	while (i < table->num_of_philos)
 	{
 		j = 2;
@@ -70,4 +80,5 @@ void	init_philos(t_table *table, char **argv)
 		table->philo[i].time_last_meal = get_time_in_ms();
 		i++;
 	}
+	return (1);
 }

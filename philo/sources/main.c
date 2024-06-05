@@ -18,10 +18,16 @@ int	main(int argc, char **argv)
 
 	table = NULL;
 	if ((argc != 5 && argc != 6) || !valid_args(argc, argv))
-		error_free_exit(table, "arguments are not valid.", EXIT_FAILURE);
-	init_table(argv, &table);
-	init_philos(table, argv);
-	init_mutex(table);
+	{
+		error_free(table, "arguments are not valid.");
+		return (EXIT_FAILURE);
+	}
+	if (!init_table(argv, &table))
+		return (EXIT_FAILURE);
+	if (!init_philos(table, argv))
+		return (EXIT_FAILURE);
+	if (!init_mutex(table))
+		return (EXIT_FAILURE);
 	launch_party(table);
 	destroy_mutex(table);
 	free_table(table);

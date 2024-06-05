@@ -51,7 +51,7 @@ bool	is_dead(t_philo *philo)
 		philo->table->dead_detected = true;
 		dead = true;
 		printf("%ld %d died\n", get_time_in_ms() - philo->table->start_time,
-			philo->id + 1);
+			philo->id + 1); // faire peut etre unmutex en plus
 	}
 	pthread_mutex_unlock(&philo->last_meal_mutex);
 	pthread_mutex_unlock(&philo->table->death_detected_mutex);
@@ -61,7 +61,7 @@ bool	is_dead(t_philo *philo)
 void	print_msg(t_philo *philo, char *msg)
 {
 	pthread_mutex_lock(&philo->table->death_detected_mutex);
-	if (!philo->table->dead_detected)
+	if (!philo->table->dead_detected) // peut etre mettre la fonciton is dead
 	{
 		pthread_mutex_lock(&philo->table->print_mutex);
 		pthread_mutex_unlock(&philo->table->death_detected_mutex);

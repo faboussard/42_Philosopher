@@ -82,9 +82,7 @@ void	launch_party(t_table *table)
 {
 	if (table->num_of_philos == 1)
 	{
-		table->start_time = get_time_in_ms();
-		printf("%ld %d died\n", get_time_in_ms() - table->start_time,
-			table->philo->id + 1);
+		printf("0 %d died\n", table->philo->id + 1);
 		return ;
 	}
 	create_threads(table);
