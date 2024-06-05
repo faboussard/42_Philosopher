@@ -49,14 +49,14 @@ int create_threads(t_table *table)
 	return (1);
 }
 
-int terminate_threads(t_table *table, unsigned int number_of_philos)
+int terminate_threads(t_table *table, unsigned int number_of_threads)
 {
 	bool			flag;
 	unsigned int	i;
 
 	i = 0;
 	flag = 0;
-	while (i < number_of_philos)
+	while (i < number_of_threads)
 	{
 		if (pthread_join(table->threads[i], NULL) != 0)
 		{

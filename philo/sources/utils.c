@@ -30,38 +30,40 @@ void	ft_usleep(size_t time_in_ms)
 		usleep(time_in_ms / 10);
 }
 
-bool	is_dead(t_philo *philo)
+bool is_dead(t_philo *philo)
 {
-	bool	dead;
-	size_t	time_since_last_meal;
+	bool dead = false;
+	size_t time_since_last_meal;
 
-	dead = false;
 	pthread_mutex_lock(&philo->table->death_detected_mutex);
-	if (philo->table->dead_detected)
-	{
+	if (philo->table->dead_detected) {
 		pthread_mutex_unlock(&philo->table->death_detected_mutex);
-		return (true);
+		return true;
 	}
-	pthread_mutex_unlock(&philo->table->death_detected_mutex);
-	pthread_mutex_lock(&philo->table->death_detected_mutex);
 	pthread_mutex_lock(&philo->last_meal_mutex);
 	time_since_last_meal = get_time_in_ms() - philo->time_last_meal;
-	if (time_since_last_meal >= philo->time_to_die)
-	{
+	if (time_since_last_meal >= philo->time_to_die) {
 		philo->table->dead_detected = true;
 		dead = true;
-		printf("%ld %d died\n", get_time_in_ms() - philo->table->start_time,
-			philo->id + 1); // faire peut etre unmutex en plus
 	}
 	pthread_mutex_unlock(&philo->last_meal_mutex);
+	if (dead)
+	{
+		pthread_mutex_lock(&philo->table->print_dead_mutex);
+		if (philo->table->dead_detected)
+			printf("%ld %d died\n", get_time_in_ms() - philo->table->start_time, philo->id + 1);
+		pthread_mutex_unlock(&philo->table->print_dead_mutex);
+	}
 	pthread_mutex_unlock(&philo->table->death_detected_mutex);
-	return (dead);
+	return dead;
 }
+
+
 
 void	print_msg(t_philo *philo, char *msg)
 {
 	pthread_mutex_lock(&philo->table->death_detected_mutex);
-	if (!philo->table->dead_detected) // peut etre mettre la fonciton is dead
+	if (!philo->table->dead_detected)
 	{
 		pthread_mutex_lock(&philo->table->print_mutex);
 		pthread_mutex_unlock(&philo->table->death_detected_mutex);

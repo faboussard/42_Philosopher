@@ -22,11 +22,15 @@ static void	until_you_die(t_philo *philo)
 			return ;
 		if (is_dead(philo))
 			return ;
-		print_msg(philo, "is sleeping");
-		ft_usleep(philo->time_to_sleep);
+		if (!is_dead(philo))
+		{
+			print_msg(philo, "is sleeping");
+			ft_usleep(philo->time_to_sleep);
+		}
 		if (is_dead(philo))
 			return ;
-		print_msg(philo, "is thinking");
+		if (!is_dead(philo))
+			print_msg(philo, "is thinking");
 	}
 }
 
@@ -35,6 +39,11 @@ static void	only_x_meals(t_philo *philo)
 	while (true)
 	{
 		pthread_mutex_lock(&philo->number_of_meals_mutex);
+		if (is_dead(philo))
+		{
+			pthread_mutex_unlock(&philo->number_of_meals_mutex);
+			return;
+		}
 		if (philo->number_of_meals == 0)
 		{
 			pthread_mutex_unlock(&philo->number_of_meals_mutex);

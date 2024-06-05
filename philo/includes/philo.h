@@ -39,6 +39,7 @@ typedef struct s_table
 	t_mutex				threads_created_mutex;
 	pthread_t			*threads;
 	t_mutex				print_mutex;
+	t_mutex				print_dead_mutex;
 	t_philo				*philo;
 }						t_table;
 
@@ -72,7 +73,7 @@ size_t					get_time_in_ms(void);
 void error_free(t_table *table, char const *error_msg);
 int						valid_args(int argc, char **argv);
 int create_threads(t_table *table);
-int terminate_threads(t_table *table, unsigned int number_of_philos);
+int terminate_threads(t_table *table, unsigned int number_of_threads);
 int init_philos(t_table *table, char **argv);
 void					launch_party(t_table *table);
 void					*routine(void *data);
