@@ -65,7 +65,6 @@ int init_philos(t_table *table, char **argv)
 		j = 2;
 		table->philo[i].table = table;
 		table->philo[i].id = i;
-		table->philo[i].has_taken_a_fork = false;
 		table->philo[i].time_to_die = ft_atoi(argv[j++]);
 		table->philo[i].time_to_eat = ft_atoi(argv[j++]);
 		table->philo[i].time_to_sleep = ft_atoi(argv[j++]);

@@ -38,7 +38,6 @@ typedef struct s_table
 	bool				threads_created;
 	t_mutex				threads_created_mutex;
 	t_mutex				print_mutex;
-	t_mutex				print_dead_mutex;
 	t_philo				*philo;
 }						t_table;
 
@@ -46,7 +45,6 @@ typedef struct s_philo
 {
 	pthread_t			tid;
 	unsigned int		id;
-	bool				has_taken_a_fork;
 	size_t				time_to_die;
 	size_t				time_to_eat;
 	size_t				time_to_sleep;
