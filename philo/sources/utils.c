@@ -42,7 +42,8 @@ bool is_dead(t_philo *philo)
 	}
 	pthread_mutex_lock(&philo->last_meal_mutex);
 	time_since_last_meal = get_time_in_ms() - philo->time_last_meal;
-	if (time_since_last_meal >= philo->time_to_die) {
+	if (time_since_last_meal >= philo->time_to_die)
+	{
 		philo->table->dead_detected = true;
 		dead = true;
 	}
@@ -57,8 +58,6 @@ bool is_dead(t_philo *philo)
 	pthread_mutex_unlock(&philo->table->death_detected_mutex);
 	return dead;
 }
-
-
 
 void	print_msg(t_philo *philo, char *msg)
 {

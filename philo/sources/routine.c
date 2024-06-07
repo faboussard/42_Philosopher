@@ -91,7 +91,10 @@ void	launch_party(t_table *table)
 {
 	if (table->num_of_philos == 1)
 	{
-		printf("0 %d died\n", table->philo->id + 1);
+		table->start_time = get_time_in_ms();
+		printf("0 1 has taken a fork\n");
+		ft_usleep(table->philo->time_to_die);
+		printf("%ld 1 died\n", get_time_in_ms() - table->start_time);
 		return ;
 	}
 	if (!create_threads(table))
