@@ -23,8 +23,6 @@ void	free_table(t_table *table)
 		free(table->philo);
 		table->philo = NULL;
 	}
-	if (table->threads)
-		free(table->threads);
 	free(table);
 	table = NULL;
 }

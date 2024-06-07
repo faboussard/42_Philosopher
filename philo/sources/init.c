@@ -21,12 +21,6 @@ int init_table(char *const *argv, t_table **table)
 		return (0);
 	}
 	(*table)->num_of_philos = ft_atoi(argv[1]);
-	(*table)->threads = ft_calloc((*table)->num_of_philos, sizeof(pthread_t));
-	if ((*table)->threads == NULL)
-	{
-		error_free(*table, "Malloc error\n");
-		return (0);
-	}
 	return (1);
 }
 

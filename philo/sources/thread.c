@@ -32,8 +32,8 @@ int create_threads(t_table *table)
 	flag = 0;
 	while (i < table->num_of_philos)
 	{
-		if (pthread_create(&table->threads[i], NULL, &routine,
-				(void *)&table->philo[i]) != 0)
+		if (pthread_create(&table->philo[i].tid, NULL, &routine,
+						   (void *)&table->philo[i]) != 0)
 		{
 			flag = 1;
 			printf("Failed to create thread %u", i);
@@ -58,7 +58,7 @@ int terminate_threads(t_table *table, unsigned int number_of_threads)
 	flag = 0;
 	while (i < number_of_threads)
 	{
-		if (pthread_join(table->threads[i], NULL) != 0)
+		if (pthread_join(table->philo[i].tid, NULL) != 0)
 		{
 			flag = 1;
 			printf("Failed to liberate thread %u", i);
