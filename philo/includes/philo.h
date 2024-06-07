@@ -81,5 +81,6 @@ void					wait_threads(t_table *table);
 bool					is_dead(t_philo *philo);
 void					print_msg(t_philo *philo, char *msg);
 int						eat(t_philo *philo);
+bool another_one_bites_the_dust(t_philo *philo);
 
 #endif // PHILO_H

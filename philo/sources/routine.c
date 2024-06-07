@@ -26,7 +26,11 @@ static void	until_you_die(t_philo *philo)
 		ft_usleep(philo->time_to_sleep);
 		if (is_dead(philo))
 			return ;
+		if (another_one_bites_the_dust(philo))
+			return ;
 		print_msg(philo, "is thinking");
+		if (another_one_bites_the_dust(philo))
+			return ;
 	}
 }
 
