@@ -15,16 +15,8 @@
 static void	get_first_and_second_fork(t_philo *philo, t_mutex **first_fork,
 		t_mutex **second_fork)
 {
-	if (philo->id % 2 == 0)
-	{
 		(*first_fork) = philo->r_fork_mutex;
 		(*second_fork) = philo->l_fork_mutex;
-	}
-	else
-	{
-		(*first_fork) = philo->l_fork_mutex;
-		(*second_fork) = philo->r_fork_mutex;
-	}
 }
 
 static bool	take_forks(t_philo *philo, t_mutex *first_fork, t_mutex *second_fork)
