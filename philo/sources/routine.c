@@ -16,21 +16,17 @@ static void	until_you_die(t_philo *philo)
 {
 	while (true)
 	{
-		if (is_dead(philo))
-			return ;
 		if (eat(philo) == 0)
 			return ;
 		if (is_dead(philo))
 			return ;
-		if (!is_dead(philo))
-		{
-			print_msg(philo, "is sleeping");
-			ft_usleep(philo->time_to_sleep);
-		}
+		print_msg(philo, "is sleeping");
 		if (is_dead(philo))
 			return ;
-		if (!is_dead(philo))
-			print_msg(philo, "is thinking");
+		ft_usleep(philo->time_to_sleep);
+		if (is_dead(philo))
+			return ;
+		print_msg(philo, "is thinking");
 	}
 }
 
