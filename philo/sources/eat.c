@@ -55,14 +55,19 @@ int	eat(t_philo *philo)
 		return (0);
 	print_msg(philo, "is eating");
 	pthread_mutex_lock(&philo->last_meal_mutex);
-//	if (is_dead(philo))
-//	{
-//		pthread_mutex_unlock(&philo->last_meal_mutex);
-//		release_forks(first_fork, second_fork);
-//		return (false);
-//	}
 	philo->time_last_meal = get_time_in_ms();
+	pthread_mutex_unlock(&philo->last_meal_mutex);
+	if (is_dead(philo))
+	{
+		release_forks(first_fork, second_fork);
+		return (0);
+	}
 	ft_usleep(philo->time_to_eat);
+	if (is_dead(philo))
+	{
+		release_forks(first_fork, second_fork);
+		return (0);
+	}
 	pthread_mutex_unlock(&philo->last_meal_mutex);
 	release_forks(first_fork, second_fork);
 	return (1);
