@@ -60,15 +60,18 @@ bool is_dead(t_philo *philo)
 
 void print_msg(t_philo *philo, char *msg)
 {
+	size_t start_time;
+
 	if (is_dead(philo))
 		return;
 	pthread_mutex_lock(&philo->table->start_time_mutex);
+	start_time = philo->table->start_time;
+	pthread_mutex_unlock(&philo->table->start_time_mutex);
 	if (is_dead(philo))
 		return;
 	pthread_mutex_lock(&philo->table->print_mutex);
-	printf("%ld %d %s\n", get_time_in_ms() - philo->table->start_time,
+	printf("%ld %d %s\n", get_time_in_ms() - start_time,
 		   philo->id + 1, msg);
-	pthread_mutex_unlock(&philo->table->start_time_mutex);
 	pthread_mutex_unlock(&philo->table->print_mutex);
 }
 
