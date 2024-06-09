@@ -68,9 +68,9 @@ void	*routine(void *pointer)
 
 	philo = (t_philo *)pointer;
 	wait_threads(philo->table);
-//	pthread_mutex_lock(&philo->table->start_time_mutex);
+	pthread_mutex_lock(&philo->table->start_time_mutex);
 	philo->table->start_time = get_time_in_ms();
-//	pthread_mutex_unlock(&philo->table->start_time_mutex);
+	pthread_mutex_unlock(&philo->table->start_time_mutex);
 	if (philo->id % 2 == 0)
 		ft_usleep(philo->time_to_eat / 2);
 	pthread_mutex_lock(&philo->number_of_meals_mutex);
