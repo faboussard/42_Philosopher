@@ -27,13 +27,13 @@ static void	until_you_die(t_philo *philo)
 	{
 		if (eat(philo) == 0)
 			return ;
-		if (philo->table->dead_detected)
+		if (dead_loop(philo))
 			return ;
 		print_msg(philo, "is sleeping");
-		if (philo->table->dead_detected)
+		if (dead_loop(philo))
 			return ;
 		ft_usleep(philo->time_to_sleep);
-		if (philo->table->dead_detected)
+		if (dead_loop(philo))
 			return ;
 		print_msg(philo, "is thinking");
 	}
