@@ -60,7 +60,6 @@ typedef struct s_philo
 int						ft_atoi(const char *string);
 long					ft_atol(const char *s);
 int						ft_isdigit(char c);
-void					ft_usleep(u_int64_t time_in_ms);
 void					*ft_bzero(void *s, size_t n);
 void					*ft_calloc(size_t nmemb, size_t size);
 void					ft_putendl_fd(const char *s, int fd);
@@ -83,5 +82,6 @@ void					print_msg(t_philo *philo, char *msg);
 int						eat(t_philo *philo);
 bool another_one_bites_the_dust(t_philo *philo);
 int	dead_loop(t_philo *philo);
+int	ft_usleep(size_t milliseconds);
 
 #endif // PHILO_H

@@ -14,31 +14,35 @@
 
 size_t get_time_in_ms(void)
 {
-	struct timeval tv;
+	struct timeval	time;
 
-	if (gettimeofday(&tv, NULL) == -1)
-		ft_putendl_fd("Gettimeofday returned -1\n", STDERR_FILENO);
-	return ((tv.tv_sec * (size_t) 1000) + (tv.tv_usec / 1000));
+	if (gettimeofday(&time, NULL) == -1)
+		write(2, "gettimeofday() error\n", 22);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-void ft_usleep(size_t time_in_ms)
+int	ft_usleep(size_t milliseconds)
 {
-	size_t start_time;
+	size_t	start;
 
-	start_time = get_time_in_ms();
-	while ((get_time_in_ms() - start_time) < time_in_ms)
-		usleep(time_in_ms / 10);
+	start = get_time_in_ms();
+	while ((get_time_in_ms() - start) < milliseconds)
+		usleep(500);
+	return (0);
 }
 
 void print_msg(t_philo *philo, char *msg)
 {
+	size_t	time;
+
 	pthread_mutex_lock(&philo->table->print_mutex);
+	time = get_time_in_ms() - philo->table->start_time;
 	if (dead_loop(philo) == 1)
 	{
 		pthread_mutex_unlock(&philo->table->print_mutex);
 		return;
 	}
-	printf("%ld %d %s\n", get_time_in_ms() - philo->table->start_time,
+	printf("%ld %d %s\n", time,
 		   philo->id + 1, msg);
 	pthread_mutex_unlock(&philo->table->print_mutex);
 }
