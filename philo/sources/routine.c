@@ -55,6 +55,8 @@ static void	only_x_meals(t_philo *philo)
 			return ;
 		print_msg(philo, "is sleeping");
 		ft_usleep(philo->time_to_sleep);
+		if (dead_loop(philo))
+			return ;
 		print_msg(philo, "is thinking");
 	}
 }
