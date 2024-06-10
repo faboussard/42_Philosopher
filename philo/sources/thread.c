@@ -47,8 +47,12 @@ void	*monitor(void *pointer)
 
 	philos = (t_philo *)pointer;
 	while (1)
+	{
 		if (check_if_dead(philos) == 1)
-			break ;
+		{
+			break;
+		}
+	}
 	return (pointer);
 }
 
@@ -73,6 +77,8 @@ int create_threads(t_table *table)
 		}
 		i++;
 	}
+	if (pthread_join(observer, NULL) != 0)
+		ft_putendl_fd("Failed to liberate observer thread", STDERR_FILENO);
 	if (flag == 1)
 		return (0);
 	return (1);

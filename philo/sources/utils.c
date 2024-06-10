@@ -37,13 +37,9 @@ void print_msg(t_philo *philo, char *msg)
 
 	pthread_mutex_lock(&philo->table->print_mutex);
 	time = get_time_in_ms() - philo->table->start_time;
-	if (dead_loop(philo) == 1)
-	{
-		pthread_mutex_unlock(&philo->table->print_mutex);
-		return;
-	}
-	printf("%ld %d %s\n", time,
-		   philo->id + 1, msg);
+	ft_usleep(1);
+	if (!dead_loop(philo))
+		printf("%ld %d %s\n", time, philo->id + 1, msg);
 	pthread_mutex_unlock(&philo->table->print_mutex);
 }
 

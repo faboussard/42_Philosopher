@@ -36,6 +36,7 @@ static void	until_you_die(t_philo *philo)
 		if (dead_loop(philo))
 			return ;
 		print_msg(philo, "is thinking");
+		usleep(100);
 	}
 }
 
