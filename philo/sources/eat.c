@@ -12,19 +12,8 @@
 
 #include "philo.h"
 
-//static void	get_first_and_second_fork(t_philo *philo, t_mutex **first_fork,
-//		t_mutex **second_fork)
-//{
-//		(*first_fork) = philo->r_fork_mutex;
-//		(*second_fork) = philo->l_fork_mutex;
-//}
-
 int	eat(t_philo *philo)
 {
-//	t_mutex	*first_fork;
-//	t_mutex	*second_fork;
-
-//	get_first_and_second_fork(philo, &first_fork, &second_fork);
 	pthread_mutex_lock(philo->r_fork_mutex);
 	if (dead_loop(philo) == 1)
 	{
@@ -40,10 +29,13 @@ int	eat(t_philo *philo)
 		return 0;
 	}
 	print_msg(philo, "has taken a fork");
+	if (dead_loop(philo))
+		return 0;
 	print_msg(philo, "is eating");
 	pthread_mutex_lock(&philo->meal_lock);
 	if (dead_loop(philo) == 1)
 	{
+		pthread_mutex_unlock(&philo->meal_lock);
 		pthread_mutex_unlock(philo->l_fork_mutex);
 		pthread_mutex_unlock(philo->r_fork_mutex);
 		return 0;

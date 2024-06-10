@@ -23,7 +23,7 @@ int	dead_loop(t_philo *philo)
 
 static void	until_you_die(t_philo *philo)
 {
-	while (!dead_loop(philo))
+	while (1)
 	{
 		if (eat(philo) == 0)
 			return ;
@@ -65,8 +65,6 @@ void	*routine(void *pointer)
 	bool	has_meals;
 
 	philo = (t_philo *)pointer;
-	wait_threads(philo->table);
-	philo->table->start_time = get_time_in_ms();
 	if (philo->id % 2 == 0)
 		ft_usleep(philo->time_to_eat / 2);
 	pthread_mutex_lock(&philo->number_of_meals_mutex);

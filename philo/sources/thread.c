@@ -52,18 +52,6 @@ void	*monitor(void *pointer)
 	return (pointer);
 }
 
-
-void	wait_threads(t_table *table)
-{
-	pthread_mutex_lock(&table->threads_created_mutex);
-	while (table->threads_created == false)
-	{
-		pthread_mutex_unlock(&table->threads_created_mutex);
-		pthread_mutex_lock(&table->threads_created_mutex);
-	}
-	pthread_mutex_unlock(&table->threads_created_mutex);
-}
-
 int create_threads(t_table *table)
 {
 	pthread_t	    observer;
@@ -87,9 +75,6 @@ int create_threads(t_table *table)
 	}
 	if (flag == 1)
 		return (0);
-	pthread_mutex_lock(&table->threads_created_mutex);
-	table->threads_created = true;
-	pthread_mutex_unlock(&table->threads_created_mutex);
 	return (1);
 }
 

@@ -21,6 +21,7 @@ int init_table(char *const *argv, t_table **table)
 		return (0);
 	}
 	(*table)->num_of_philos = ft_atoi(argv[1]);
+	(*table)->start_time = get_time_in_ms();
 	return (1);
 }
 
