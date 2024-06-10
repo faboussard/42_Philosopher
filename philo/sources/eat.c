@@ -42,7 +42,7 @@ int	eat(t_philo *philo)
 	}
 	philo->time_last_meal = get_time_in_ms();
 	pthread_mutex_unlock(&philo->meal_lock);
-	ft_usleep(philo->time_to_eat);
+	ft_usleep(philo->time_to_eat, philo);
 	pthread_mutex_unlock(philo->r_fork_mutex);
 	pthread_mutex_unlock(philo->l_fork_mutex);
 	return (1);

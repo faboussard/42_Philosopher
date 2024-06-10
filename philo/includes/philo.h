@@ -35,8 +35,6 @@ typedef struct s_table
 	t_mutex				start_time_mutex;
 	bool				dead_detected;
 	t_mutex				death_detected_mutex;
-	bool				threads_created;
-	t_mutex				threads_created_mutex;
 	t_mutex				print_mutex;
 	t_philo				*philo;
 }						t_table;
@@ -76,12 +74,9 @@ void					launch_party(t_table *table);
 void					*routine(void *data);
 int init_mutex(t_table *table);
 void					destroy_mutex(t_table *table);
-void					wait_threads(t_table *table);
-bool					is_dead(t_philo *philo);
 void					print_msg(t_philo *philo, char *msg);
 int						eat(t_philo *philo);
-bool another_one_bites_the_dust(t_philo *philo);
 int	dead_loop(t_philo *philo);
-int	ft_usleep(size_t milliseconds);
+int	ft_usleep(size_t ms, t_philo *philosopher);
 
 #endif // PHILO_H

@@ -32,11 +32,10 @@ static void	until_you_die(t_philo *philo)
 		print_msg(philo, "is sleeping");
 		if (dead_loop(philo))
 			return ;
-		ft_usleep(philo->time_to_sleep);
+		ft_usleep(philo->time_to_sleep, philo);
 		if (dead_loop(philo))
 			return ;
 		print_msg(philo, "is thinking");
-		usleep(100);
 	}
 }
 
@@ -44,6 +43,8 @@ static void	only_x_meals(t_philo *philo)
 {
 	while (true)
 	{
+		print_msg(philo, "is thinking");
+		ft_usleep(10, philo);
 		pthread_mutex_lock(&philo->number_of_meals_mutex);
 		if (philo->number_of_meals == 0)
 		{
@@ -55,10 +56,9 @@ static void	only_x_meals(t_philo *philo)
 		if (eat(philo) == 0)
 			return ;
 		print_msg(philo, "is sleeping");
-		ft_usleep(philo->time_to_sleep);
+		ft_usleep(philo->time_to_sleep, philo);
 		if (dead_loop(philo))
 			return ;
-		print_msg(philo, "is thinking");
 	}
 }
 
@@ -69,7 +69,7 @@ void	*routine(void *pointer)
 
 	philo = (t_philo *)pointer;
 	if (philo->id % 2 == 0)
-		ft_usleep(philo->time_to_eat / 2);
+		ft_usleep(philo->time_to_eat / 2, philo);
 	pthread_mutex_lock(&philo->number_of_meals_mutex);
 	has_meals = philo->number_of_meals > 0;
 	pthread_mutex_unlock(&philo->number_of_meals_mutex);
@@ -86,7 +86,7 @@ void	launch_party(t_table *table)
 	{
 		table->start_time = get_time_in_ms();
 		printf("0 1 has taken a fork\n");
-		ft_usleep(table->philo->time_to_die);
+		ft_usleep(table->philo->time_to_die, table->philo);
 		printf("%ld 1 died\n", get_time_in_ms() - table->start_time);
 		return ;
 	}
