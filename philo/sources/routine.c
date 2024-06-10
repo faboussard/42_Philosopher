@@ -12,19 +12,28 @@
 
 #include "philo.h"
 
+int	dead_loop(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->table->death_detected_mutex);
+	if (philo->table->dead_detected == 1)
+		return (pthread_mutex_unlock(&philo->table->death_detected_mutex), 1);
+	pthread_mutex_unlock(&philo->table->death_detected_mutex);
+	return (0);
+}
+
 static void	until_you_die(t_philo *philo)
 {
-	while (true)
+	while (!dead_loop(philo))
 	{
 		if (eat(philo) == 0)
 			return ;
-		if (is_dead(philo))
+		if (philo->table->dead_detected)
 			return ;
 		print_msg(philo, "is sleeping");
-		if (is_dead(philo))
+		if (philo->table->dead_detected)
 			return ;
 		ft_usleep(philo->time_to_sleep);
-		if (is_dead(philo))
+		if (philo->table->dead_detected)
 			return ;
 		print_msg(philo, "is thinking");
 	}
@@ -35,11 +44,6 @@ static void	only_x_meals(t_philo *philo)
 	while (true)
 	{
 		pthread_mutex_lock(&philo->number_of_meals_mutex);
-		if (is_dead(philo))
-		{
-			pthread_mutex_unlock(&philo->number_of_meals_mutex);
-			return;
-		}
 		if (philo->number_of_meals == 0)
 		{
 			pthread_mutex_unlock(&philo->number_of_meals_mutex);
@@ -47,16 +51,10 @@ static void	only_x_meals(t_philo *philo)
 		}
 		philo->number_of_meals--;
 		pthread_mutex_unlock(&philo->number_of_meals_mutex);
-		if (is_dead(philo))
-			return ;
 		if (eat(philo) == 0)
-			return ;
-		if (is_dead(philo))
 			return ;
 		print_msg(philo, "is sleeping");
 		ft_usleep(philo->time_to_sleep);
-		if (is_dead(philo))
-			return ;
 		print_msg(philo, "is thinking");
 	}
 }

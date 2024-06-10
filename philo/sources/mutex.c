@@ -39,7 +39,7 @@ static void	destroy_philo_mutexes(const t_table *table, unsigned int i)
 	while (i < table->num_of_philos)
 	{
 		pthread_mutex_destroy(&table->philo[i].number_of_meals_mutex);
-		pthread_mutex_destroy(&table->philo[i].last_meal_mutex);
+		pthread_mutex_destroy(&table->philo[i].meal_lock);
 		pthread_mutex_destroy(&table->forks[i]);
 		i++;
 	}
@@ -70,7 +70,7 @@ int	init_mutex(t_table *table)
 	}
 	while (i < table->num_of_philos)
 	{
-		pthread_mutex_init(&table->philo[i].last_meal_mutex, NULL);
+		pthread_mutex_init(&table->philo[i].meal_lock, NULL);
 		pthread_mutex_init(&table->philo[i].number_of_meals_mutex, NULL);
 		i++;
 	}

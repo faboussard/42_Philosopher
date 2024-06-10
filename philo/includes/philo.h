@@ -51,7 +51,7 @@ typedef struct s_philo
 	size_t				number_of_meals;
 	t_mutex				number_of_meals_mutex;
 	size_t				time_last_meal;
-	t_mutex				last_meal_mutex;
+	t_mutex				meal_lock;
 	t_mutex				*r_fork_mutex;
 	t_mutex				*l_fork_mutex;
 	t_table				*table;
@@ -82,5 +82,6 @@ bool					is_dead(t_philo *philo);
 void					print_msg(t_philo *philo, char *msg);
 int						eat(t_philo *philo);
 bool another_one_bites_the_dust(t_philo *philo);
+int	dead_loop(t_philo *philo);
 
 #endif // PHILO_H
