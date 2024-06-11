@@ -56,13 +56,13 @@ int print_msg(t_philo *philo, char *msg)
 	{
 		pthread_mutex_unlock(&philo->table->print_mutex);
 		pthread_mutex_unlock(&philo->table->death_detected_mutex);
-		return 0;
+		return (0);
 	}
 	printf("%ld %d %s\n", time, philo->id + 1, msg);
 	if (ft_strcmp(msg, "died") == 0)
 		philo->table->dead_detected = 1;
 	pthread_mutex_unlock(&philo->table->print_mutex);
 	pthread_mutex_unlock(&philo->table->death_detected_mutex);
-	return 1;
+	return (1);
 }
 
