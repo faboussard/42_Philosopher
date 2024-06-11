@@ -23,25 +23,18 @@ int	dead_loop(t_philo *philo)
 
 static void	until_you_die(t_philo *philo)
 {
-	while (1)
+	while (!dead_loop(philo))
 	{
-		if (eat(philo) == 0)
-			return ;
-		if (dead_loop(philo))
-			return ;
+		eat(philo);
 		print_msg(philo, "is sleeping");
-		if (dead_loop(philo))
-			return ;
 		ft_usleep(philo->time_to_sleep, philo);
-		if (dead_loop(philo))
-			return ;
 		print_msg(philo, "is thinking");
 	}
 }
 
 static void	only_x_meals(t_philo *philo)
 {
-	while (true)
+	while (!dead_loop(philo))
 	{
 		print_msg(philo, "is thinking");
 		ft_usleep(10, philo);
@@ -53,12 +46,9 @@ static void	only_x_meals(t_philo *philo)
 		}
 		philo->number_of_meals--;
 		pthread_mutex_unlock(&philo->number_of_meals_mutex);
-		if (eat(philo) == 0)
-			return ;
+		eat(philo);
 		print_msg(philo, "is sleeping");
 		ft_usleep(philo->time_to_sleep, philo);
-		if (dead_loop(philo))
-			return ;
 	}
 }
 

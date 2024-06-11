@@ -30,7 +30,7 @@ int	ft_usleep(size_t ms, t_philo *philosopher)
 	while ((get_time_in_ms() - start_time) < ms
 	       && !dead_loop(philosopher))
 	{
-		usleep(100);
+		usleep(500);
 	}
 	return (0);
 }
