@@ -28,7 +28,9 @@ static void	until_you_die(t_philo *philo)
 		eat(philo);
 		print_msg(philo, "is sleeping");
 		ft_usleep(philo->time_to_sleep, philo);
+		ft_usleep(10, philo);
 		print_msg(philo, "is thinking");
+		ft_usleep(10, philo);
 	}
 }
 
