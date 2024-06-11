@@ -31,9 +31,6 @@ int	check_if_dead(t_philo *philos)
 		if (philosopher_dead(&philos[i], philos[i].time_to_die))
 		{
 			print_msg(&philos[i], "died");
-			pthread_mutex_lock(&philos->table->death_detected_mutex);
-			philos->table->dead_detected = 1;
-			pthread_mutex_unlock(&philos->table->death_detected_mutex);
 			return (1);
 		}
 		i++;

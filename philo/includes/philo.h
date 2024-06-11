@@ -74,7 +74,7 @@ void					launch_party(t_table *table);
 void					*routine(void *data);
 int init_mutex(t_table *table);
 void					destroy_mutex(t_table *table);
-void					print_msg(t_philo *philo, char *msg);
+int print_msg(t_philo *philo, char *msg);
 void eat(t_philo *philo);
 int	dead_loop(t_philo *philo);
 int	ft_usleep(size_t ms, t_philo *philosopher);

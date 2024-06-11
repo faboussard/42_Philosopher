@@ -15,10 +15,24 @@
 void eat(t_philo *philo)
 {
 	pthread_mutex_lock(philo->r_fork_mutex);
-	print_msg(philo, "has taken a fork");
+	if (!print_msg(philo, "has taken a fork"))
+	{
+		pthread_mutex_unlock(philo->r_fork_mutex);
+		return;
+	}
 	pthread_mutex_lock(philo->l_fork_mutex);
-	print_msg(philo, "has taken a fork");
-	print_msg(philo, "is eating");
+	if (!print_msg(philo, "has taken a fork"))
+	{
+		pthread_mutex_unlock(philo->l_fork_mutex);
+		pthread_mutex_unlock(philo->r_fork_mutex);
+		return ;
+	}
+	if (!print_msg(philo, "is eating"))
+	{
+		pthread_mutex_unlock(philo->l_fork_mutex);
+		pthread_mutex_unlock(philo->r_fork_mutex);
+		return ;
+	}
 	pthread_mutex_lock(&philo->meal_lock);
 	philo->time_last_meal = get_time_in_ms();
 	pthread_mutex_unlock(&philo->meal_lock);

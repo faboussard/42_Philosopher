@@ -23,14 +23,14 @@ int	dead_loop(t_philo *philo)
 
 static void	until_you_die(t_philo *philo)
 {
-	while (!dead_loop(philo))
+	while (1)
 	{
 		eat(philo);
-		print_msg(philo, "is sleeping");
+		if (!print_msg(philo, "is sleeping"))
+			return ;
 		ft_usleep(philo->time_to_sleep, philo);
-		ft_usleep(10, philo);
-		print_msg(philo, "is thinking");
-		ft_usleep(10, philo);
+		if (!print_msg(philo, "is thinking"))
+			return ;
 	}
 }
 

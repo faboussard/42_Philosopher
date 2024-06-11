@@ -34,25 +34,25 @@ int	ft_usleep(size_t ms, t_philo *philosopher)
 	}
 	return (0);
 }
-//
-//int	ft_usleep(size_t milliseconds)
-//{
-//	size_t	start;
-//
-//	start = get_time_in_ms();
-//	while ((get_time_in_ms() - start) < milliseconds)
-//		usleep(500);
-//	return (0);
-//}
 
-void print_msg(t_philo *philo, char *msg)
+int print_msg(t_philo *philo, char *msg)
 {
 	size_t	time;
 
-	pthread_mutex_lock(&philo->table->print_mutex);
 	time = get_time_in_ms() - philo->table->start_time;
-	if (!dead_loop(philo))
-		printf("%ld %d %s\n", time, philo->id + 1, msg);
+	pthread_mutex_lock(&philo->table->death_detected_mutex);
+	pthread_mutex_lock(&philo->table->print_mutex);
+	if (philo->table->dead_detected == 1)
+	{
+		pthread_mutex_unlock(&philo->table->print_mutex);
+		pthread_mutex_unlock(&philo->table->death_detected_mutex);
+		return 0;
+	}
+	printf("%ld %d %s\n", time, philo->id + 1, msg);
+	if (strcmp(msg, "died") == 0)
+		philo->table->dead_detected = 1;
 	pthread_mutex_unlock(&philo->table->print_mutex);
+	pthread_mutex_unlock(&philo->table->death_detected_mutex);
+	return 1;
 }
 
