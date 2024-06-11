@@ -35,6 +35,16 @@ int	ft_usleep(size_t ms, t_philo *philosopher)
 	return (0);
 }
 
+static int	ft_strcmp(const char *s1, const char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0')
+		i++;
+	return (s1[i] - s2[i]);
+}
+
 int print_msg(t_philo *philo, char *msg)
 {
 	size_t	time;
