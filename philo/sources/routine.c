@@ -38,8 +38,6 @@ static void	only_x_meals(t_philo *philo)
 {
 	while (!dead_loop(philo))
 	{
-		print_msg(philo, "is thinking");
-		ft_usleep(10, philo);
 		pthread_mutex_lock(&philo->number_of_meals_mutex);
 		if (philo->number_of_meals == 0)
 		{
@@ -49,8 +47,11 @@ static void	only_x_meals(t_philo *philo)
 		philo->number_of_meals--;
 		pthread_mutex_unlock(&philo->number_of_meals_mutex);
 		eat(philo);
-		print_msg(philo, "is sleeping");
+		if (!print_msg(philo, "is sleeping"))
+			return ;
 		ft_usleep(philo->time_to_sleep, philo);
+		if (!print_msg(philo, "is thinking"))
+			return ;
 	}
 }
 
