@@ -46,7 +46,7 @@ typedef struct s_philo
 	size_t				time_to_die;
 	size_t				time_to_eat;
 	size_t				time_to_sleep;
-	size_t				number_of_meals;
+	int 				number_of_meals;
 	t_mutex				number_of_meals_mutex;
 	size_t				time_last_meal;
 	t_mutex				meal_lock;
@@ -78,5 +78,6 @@ int print_msg(t_philo *philo, char *msg);
 void eat(t_philo *philo);
 int	dead_loop(t_philo *philo);
 int	ft_usleep(size_t ms, t_philo *philosopher);
+int print_msg_x_meals(t_philo *philo, char *msg);
 
 #endif // PHILO_H

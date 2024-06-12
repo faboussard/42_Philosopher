@@ -52,6 +52,15 @@ int print_msg(t_philo *philo, char *msg)
 	time = get_time_in_ms() - philo->table->start_time;
 	pthread_mutex_lock(&philo->table->death_detected_mutex);
 	pthread_mutex_lock(&philo->table->print_mutex);
+	pthread_mutex_lock(&philo->number_of_meals_mutex);
+	if (philo->number_of_meals == 0)
+	{
+		pthread_mutex_unlock(&philo->number_of_meals_mutex);
+		pthread_mutex_unlock(&philo->table->print_mutex);
+		pthread_mutex_unlock(&philo->table->death_detected_mutex);
+		return (0);
+	}
+	pthread_mutex_unlock(&philo->number_of_meals_mutex);
 	if (philo->table->dead_detected == 1)
 	{
 		pthread_mutex_unlock(&philo->table->print_mutex);
