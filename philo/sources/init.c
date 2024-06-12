@@ -71,6 +71,8 @@ int init_philos(t_table *table, char **argv)
 		table->philo[i].time_to_sleep = ft_atoi(argv[j++]);
 		if (argv[j])
 			table->philo[i].number_of_meals = ft_atoi(argv[j]);
+		else
+			table->philo[i].number_of_meals = -1;
 		table->philo[i].time_last_meal = get_time_in_ms();
 		i++;
 	}

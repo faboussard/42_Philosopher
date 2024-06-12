@@ -66,7 +66,10 @@ void	*routine(void *pointer)
 	if (philo->id % 2 == 0)
 		ft_usleep(philo->time_to_eat / 2, philo);
 	pthread_mutex_lock(&philo->number_of_meals_mutex);
-	has_meals = philo->number_of_meals > 0;
+	if (philo->number_of_meals > 0)
+		has_meals = true;
+	else
+		has_meals = false;
 	pthread_mutex_unlock(&philo->number_of_meals_mutex);
 	if (has_meals)
 		only_x_meals(philo);
