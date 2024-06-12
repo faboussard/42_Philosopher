@@ -17,8 +17,7 @@ int	init_forks_mutex(t_table *table)
 	unsigned int	i;
 
 	i = 0;
-	table->forks = malloc(sizeof(pthread_mutex_t)
-			* table->num_of_philos);
+	table->forks = malloc(sizeof(pthread_mutex_t) * table->num_of_philos);
 	if (table->forks == NULL)
 		return (0);
 	while (i < table->num_of_philos)

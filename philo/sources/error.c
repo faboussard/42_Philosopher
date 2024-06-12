@@ -12,7 +12,7 @@
 
 #include "../includes/philo.h"
 
-void error_free(t_table *table, char const *error_msg)
+void	error_free(t_table *table, char const *error_msg)
 {
 	free_table(table);
 	ft_putendl_fd(error_msg, STDERR_FILENO);

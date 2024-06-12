@@ -12,13 +12,13 @@
 
 #include "philo.h"
 
-void eat(t_philo *philo)
+void	eat(t_philo *philo)
 {
 	pthread_mutex_lock(philo->r_fork_mutex);
 	if (!print_msg(philo, "has taken a fork"))
 	{
 		pthread_mutex_unlock(philo->r_fork_mutex);
-		return;
+		return ;
 	}
 	pthread_mutex_lock(philo->l_fork_mutex);
 	if (!print_msg(philo, "has taken a fork"))

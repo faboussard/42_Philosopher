@@ -46,7 +46,7 @@ typedef struct s_philo
 	size_t				time_to_die;
 	size_t				time_to_eat;
 	size_t				time_to_sleep;
-	int 				number_of_meals;
+	int					number_of_meals;
 	t_mutex				number_of_meals_mutex;
 	size_t				time_last_meal;
 	t_mutex				meal_lock;
@@ -63,21 +63,22 @@ void					*ft_calloc(size_t nmemb, size_t size);
 void					ft_putendl_fd(const char *s, int fd);
 char					*ft_strjoin(char const *s1, char const *s2);
 void					free_table(t_table *table);
-int init_table(char *const *argv, t_table **table);
+int						init_table(char *const *argv, t_table **table);
 size_t					get_time_in_ms(void);
-void error_free(t_table *table, char const *error_msg);
+void					error_free(t_table *table, char const *error_msg);
 int						valid_args(int argc, char **argv);
-int create_threads(t_table *table);
-int terminate_threads(t_table *table, unsigned int number_of_threads);
-int init_philos(t_table *table, char **argv);
+int						create_threads(t_table *table);
+int						terminate_threads(t_table *table,
+							unsigned int number_of_threads);
+int						init_philos(t_table *table, char **argv);
 void					launch_party(t_table *table);
 void					*routine(void *data);
-int init_mutex(t_table *table);
+int						init_mutex(t_table *table);
 void					destroy_mutex(t_table *table);
-int print_msg(t_philo *philo, char *msg);
-void eat(t_philo *philo);
-int	dead_loop(t_philo *philo);
-int	ft_usleep(size_t ms, t_philo *philosopher);
-int print_msg_x_meals(t_philo *philo, char *msg);
+int						print_msg(t_philo *philo, char *msg);
+void					eat(t_philo *philo);
+int						dead_loop(t_philo *philo);
+int						ft_usleep(size_t ms, t_philo *philosopher);
+int						print_msg_x_meals(t_philo *philo, char *msg);
 
 #endif // PHILO_H

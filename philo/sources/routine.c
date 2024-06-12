@@ -42,7 +42,7 @@ static void	only_x_meals(t_philo *philo)
 		if (philo->number_of_meals == 0)
 		{
 			pthread_mutex_unlock(&philo->number_of_meals_mutex);
-			return;
+			return ;
 		}
 		pthread_mutex_unlock(&philo->number_of_meals_mutex);
 		eat(philo);

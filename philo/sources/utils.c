@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-size_t get_time_in_ms(void)
+size_t	get_time_in_ms(void)
 {
 	struct timeval	time;
 
@@ -27,8 +27,7 @@ int	ft_usleep(size_t ms, t_philo *philosopher)
 
 	start_time = get_time_in_ms();
 	usleep(ms * 1000 * 0.9);
-	while ((get_time_in_ms() - start_time) < ms
-	       && !dead_loop(philosopher))
+	while ((get_time_in_ms() - start_time) < ms && !dead_loop(philosopher))
 	{
 		usleep(500);
 	}
@@ -45,14 +44,19 @@ static int	ft_strcmp(const char *s1, const char *s2)
 	return (s1[i] - s2[i]);
 }
 
-int print_msg(t_philo *philo, char *msg)
+static void	lock_for_print(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->table->death_detected_mutex);
+	pthread_mutex_lock(&philo->table->print_mutex);
+	pthread_mutex_lock(&philo->number_of_meals_mutex);
+}
+
+int	print_msg(t_philo *philo, char *msg)
 {
 	size_t	time;
 
 	time = get_time_in_ms() - philo->table->start_time;
-	pthread_mutex_lock(&philo->table->death_detected_mutex);
-	pthread_mutex_lock(&philo->table->print_mutex);
-	pthread_mutex_lock(&philo->number_of_meals_mutex);
+	lock_for_print(philo);
 	if (philo->number_of_meals == 0)
 	{
 		pthread_mutex_unlock(&philo->number_of_meals_mutex);
@@ -74,4 +78,3 @@ int print_msg(t_philo *philo, char *msg)
 	pthread_mutex_unlock(&philo->table->death_detected_mutex);
 	return (1);
 }
-

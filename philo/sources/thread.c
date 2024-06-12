@@ -47,15 +47,15 @@ void	*monitor(void *pointer)
 	{
 		if (check_if_dead(philos) == 1)
 		{
-			break;
+			break ;
 		}
 	}
 	return (pointer);
 }
 
-int create_threads(t_table *table)
+int	create_threads(t_table *table)
 {
-	pthread_t	    observer;
+	pthread_t		observer;
 	unsigned int	i;
 	bool			flag;
 
@@ -66,7 +66,7 @@ int create_threads(t_table *table)
 	while (i < table->num_of_philos)
 	{
 		if (pthread_create(&table->philo[i].tid, NULL, &routine,
-						   (void *)&table->philo[i]) != 0)
+				(void *)&table->philo[i]) != 0)
 		{
 			flag = 1;
 			ft_putendl_fd("Failed to create thread", STDERR_FILENO);
@@ -81,7 +81,7 @@ int create_threads(t_table *table)
 	return (1);
 }
 
-int terminate_threads(t_table *table, unsigned int number_of_threads)
+int	terminate_threads(t_table *table, unsigned int number_of_threads)
 {
 	bool			flag;
 	unsigned int	i;
