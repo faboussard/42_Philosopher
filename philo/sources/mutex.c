@@ -49,6 +49,7 @@ static void	destroy_table_mutexes(t_table *table)
 	pthread_mutex_destroy(&table->start_time_mutex);
 	pthread_mutex_destroy(&table->print_mutex);
 	pthread_mutex_destroy(&table->death_detected_mutex);
+	pthread_mutex_destroy(&table->end_dinner_mutex);
 }
 
 int	init_mutex(t_table *table)
@@ -59,6 +60,7 @@ int	init_mutex(t_table *table)
 	pthread_mutex_init(&table->start_time_mutex, NULL);
 	pthread_mutex_init(&table->print_mutex, NULL);
 	pthread_mutex_init(&table->death_detected_mutex, NULL);
+	pthread_mutex_init(&table->end_dinner_mutex, NULL);
 	if (!init_forks_mutex(table))
 	{
 		destroy_table_mutexes(table);

@@ -21,6 +21,16 @@ int	philosopher_dead(t_philo *philo, size_t time_to_die)
 	return (0);
 }
 
+int	end_dinner(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->table->end_dinner_mutex);
+	if (philo->table->end_dinner == 1)
+		return (pthread_mutex_unlock(&philo->table->end_dinner_mutex), 1);
+	pthread_mutex_unlock(&philo->table->end_dinner_mutex);
+	return (0);
+}
+
+
 int	check_if_dead(t_philo *philos)
 {
 	size_t	i;
@@ -28,9 +38,11 @@ int	check_if_dead(t_philo *philos)
 	i = 0;
 	while (i < philos->table->num_of_philos)
 	{
+		if (end_dinner(&philos[i]))
+			return (1);
 		if (philosopher_dead(&philos[i], philos[i].time_to_die))
 		{
-			print_msg(&philos[i], "died");
+			print_msg(&philos[i], "died", 1);
 			return (1);
 		}
 		i++;

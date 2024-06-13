@@ -12,22 +12,22 @@
 
 #include "philo.h"
 
-void	eat(t_philo *philo)
+void eat(t_philo *philo, int i)
 {
 	pthread_mutex_lock(philo->r_fork_mutex);
-	if (!print_msg(philo, "has taken a fork"))
+	if (!print_msg(philo, "has taken a fork", i))
 	{
 		pthread_mutex_unlock(philo->r_fork_mutex);
 		return ;
 	}
 	pthread_mutex_lock(philo->l_fork_mutex);
-	if (!print_msg(philo, "has taken a fork"))
+	if (!print_msg(philo, "has taken a fork", i))
 	{
 		pthread_mutex_unlock(philo->l_fork_mutex);
 		pthread_mutex_unlock(philo->r_fork_mutex);
 		return ;
 	}
-	if (!print_msg(philo, "is eating"))
+	if (!print_msg(philo, "is eating", i))
 	{
 		pthread_mutex_unlock(philo->l_fork_mutex);
 		pthread_mutex_unlock(philo->r_fork_mutex);
@@ -37,6 +37,6 @@ void	eat(t_philo *philo)
 	philo->time_last_meal = get_time_in_ms();
 	pthread_mutex_unlock(&philo->meal_lock);
 	ft_usleep(philo->time_to_eat, philo);
-	pthread_mutex_unlock(philo->r_fork_mutex);
 	pthread_mutex_unlock(philo->l_fork_mutex);
+	pthread_mutex_unlock(philo->r_fork_mutex);
 }

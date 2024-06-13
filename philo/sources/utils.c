@@ -44,27 +44,15 @@ static int	ft_strcmp(const char *s1, const char *s2)
 	return (s1[i] - s2[i]);
 }
 
-static void	lock_for_print(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->table->death_detected_mutex);
-	pthread_mutex_lock(&philo->table->print_mutex);
-	pthread_mutex_lock(&philo->number_of_meals_mutex);
-}
-
-int	print_msg(t_philo *philo, char *msg)
+int print_msg(t_philo *philo, char *msg, int i)
 {
 	size_t	time;
 
-	time = get_time_in_ms() - philo->table->start_time;
-	lock_for_print(philo);
-	if (philo->number_of_meals == 0)
-	{
-		pthread_mutex_unlock(&philo->number_of_meals_mutex);
-		pthread_mutex_unlock(&philo->table->print_mutex);
-		pthread_mutex_unlock(&philo->table->death_detected_mutex);
+	if (i == 0)
 		return (0);
-	}
-	pthread_mutex_unlock(&philo->number_of_meals_mutex);
+	time = get_time_in_ms() - philo->table->start_time;
+	pthread_mutex_lock(&philo->table->death_detected_mutex);
+	pthread_mutex_lock(&philo->table->print_mutex);
 	if (philo->table->dead_detected == 1)
 	{
 		pthread_mutex_unlock(&philo->table->print_mutex);
