@@ -36,9 +36,15 @@ static void	until_you_die(t_philo *philo)
 
 static void	only_x_meals(t_philo *philo)
 {
+	int i;
+
 	pthread_mutex_lock(&philo->number_of_meals_mutex);
-	while (philo->number_of_meals > 0)
+	i = philo->number_of_meals;
+	pthread_mutex_unlock(&philo->number_of_meals_mutex);
+
+	while (i >= 0)
 	{
+		pthread_mutex_lock(&philo->number_of_meals_mutex);
 		if (philo->number_of_meals == 0)
 		{
 			pthread_mutex_unlock(&philo->number_of_meals_mutex);
@@ -53,6 +59,7 @@ static void	only_x_meals(t_philo *philo)
 			return ;
 		pthread_mutex_lock(&philo->number_of_meals_mutex);
 		philo->number_of_meals--;
+		i--;
 		pthread_mutex_unlock(&philo->number_of_meals_mutex);
 	}
 }
