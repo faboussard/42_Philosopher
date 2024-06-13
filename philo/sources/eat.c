@@ -12,87 +12,57 @@
 
 #include "philo.h"
 
-//static void choose_fork(t_philo *philo, pthread_mutex_t **first_fork, pthread_mutex_t **second_fork)
-//{
-//	if (philo->l_fork_mutex < philo->r_fork_mutex)
-//	{
-//		(*first_fork) = philo->l_fork_mutex;
-//		(*second_fork) = philo->r_fork_mutex;
-//	}
-//	else
-//	{
-//		(*first_fork) = philo->r_fork_mutex;
-//		(*second_fork) = philo->l_fork_mutex;
-//	}
-//}
-//
-//void update_time_last_meal(t_philo *philo)
-//{
-//	pthread_mutex_lock(&philo->meal_lock);
-//	philo->time_last_meal = get_time_in_ms();
-//	pthread_mutex_unlock(&philo->meal_lock);
-//}
-//
-//static void release_forks(pthread_mutex_t *first_fork, pthread_mutex_t *second_fork)
-//{
-//	pthread_mutex_unlock(second_fork);
-//	pthread_mutex_unlock(first_fork);
-//}
-//
-//void eat(t_philo *philo, int i)
-//{
-//	pthread_mutex_t *first_fork;
-//	pthread_mutex_t *second_fork;
-//
-//	choose_fork(philo, &first_fork, &second_fork);
-//	pthread_mutex_lock(first_fork);
-//	if (!print_msg(philo, "has taken a fork", i))
-//	{
-//		pthread_mutex_unlock(first_fork);
-//		return;
-//	}
-//	pthread_mutex_lock(second_fork);
-//	if (!print_msg(philo, "has taken a fork", i))
-//	{
-//		release_forks(first_fork, second_fork);
-//		return;
-//	}
-//	if (!print_msg(philo, "is eating", i))
-//	{
-//		release_forks(first_fork, second_fork);
-//		return;
-//	}
-//	update_time_last_meal(philo);
-//	ft_usleep(philo->time_to_eat, philo);
-//	release_forks(first_fork, second_fork);
-//}
-
-
-void eat(t_philo *philo, int i)
+static void choose_fork(t_philo *philo, pthread_mutex_t **first_fork, pthread_mutex_t **second_fork)
 {
-	pthread_mutex_lock(philo->r_fork_mutex);
-	if (!print_msg(philo, "has taken a fork", i))
+	if (philo->l_fork_mutex < philo->r_fork_mutex)
 	{
-		pthread_mutex_unlock(philo->r_fork_mutex);
-		return ;
+		(*first_fork) = philo->l_fork_mutex;
+		(*second_fork) = philo->r_fork_mutex;
 	}
-	pthread_mutex_lock(philo->l_fork_mutex);
-	if (!print_msg(philo, "has taken a fork", i))
+	else
 	{
-		pthread_mutex_unlock(philo->l_fork_mutex);
-		pthread_mutex_unlock(philo->r_fork_mutex);
-		return ;
+		(*first_fork) = philo->r_fork_mutex;
+		(*second_fork) = philo->l_fork_mutex;
 	}
-	if (!print_msg(philo, "is eating", i))
-	{
-		pthread_mutex_unlock(philo->l_fork_mutex);
-		pthread_mutex_unlock(philo->r_fork_mutex);
-		return ;
-	}
+}
+
+void update_time_last_meal(t_philo *philo)
+{
 	pthread_mutex_lock(&philo->meal_lock);
 	philo->time_last_meal = get_time_in_ms();
 	pthread_mutex_unlock(&philo->meal_lock);
+}
+
+static void release_forks(pthread_mutex_t *first_fork, pthread_mutex_t *second_fork)
+{
+	pthread_mutex_unlock(second_fork);
+	pthread_mutex_unlock(first_fork);
+}
+
+void eat(t_philo *philo, int i)
+{
+	pthread_mutex_t *first_fork;
+	pthread_mutex_t *second_fork;
+
+	choose_fork(philo, &first_fork, &second_fork);
+	pthread_mutex_lock(first_fork);
+	if (!print_msg(philo, "has taken a fork", i))
+	{
+		pthread_mutex_unlock(first_fork);
+		return;
+	}
+	pthread_mutex_lock(second_fork);
+	if (!print_msg(philo, "has taken a fork", i))
+	{
+		release_forks(first_fork, second_fork);
+		return;
+	}
+	if (!print_msg(philo, "is eating", i))
+	{
+		release_forks(first_fork, second_fork);
+		return;
+	}
+	update_time_last_meal(philo);
 	ft_usleep(philo->time_to_eat, philo);
-	pthread_mutex_unlock(philo->l_fork_mutex);
-	pthread_mutex_unlock(philo->r_fork_mutex);
+	release_forks(first_fork, second_fork);
 }
