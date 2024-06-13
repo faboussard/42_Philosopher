@@ -15,6 +15,7 @@ SRC		=	main.c \
 		    thread.c \
 		    mutex.c \
 		    routine.c \
+		    eat_or_die.c \
 		    eat.c
 
 SRCS	= $(addprefix $(SRC_PATH), $(SRC))

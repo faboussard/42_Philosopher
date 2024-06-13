@@ -44,7 +44,6 @@ static void	only_x_meals(t_philo *philo)
 	pthread_mutex_lock(&philo->number_of_meals_mutex);
 	i = philo->number_of_meals;
 	pthread_mutex_unlock(&philo->number_of_meals_mutex);
-
 	while (i > 0)
 	{
 		eat(philo, i);
