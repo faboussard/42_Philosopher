@@ -52,6 +52,8 @@ typedef struct s_philo
 	t_mutex				number_of_meals_mutex;
 	size_t				time_last_meal;
 	t_mutex				meal_lock;
+	bool				first_fork;
+	bool				second_fork;
 	t_mutex				*r_fork_mutex;
 	t_mutex				*l_fork_mutex;
 	t_table				*table;
