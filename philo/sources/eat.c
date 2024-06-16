@@ -88,9 +88,9 @@ static void release_forks(t_philo *philo)
 static int	take_left_fork(t_philo *philo, int i)
 {
 	pthread_mutex_lock(&philo->l_fork_mutex);
-	if (philo->left_fork == FREE)
+	if (philo->left_fork == 0)
 	{
-		philo->left_fork = TAKEN;
+		philo->left_fork = 1;
 		if (!print_msg(philo, MSG_FORK, i))
 		{
 			pthread_mutex_unlock(&philo->l_fork_mutex);
@@ -122,9 +122,9 @@ static int	take_right_fork(t_philo *philo, int i)
 static int take_forks(t_philo *philo, int i)
 {
 	if (!take_left_fork(philo, i))
-		return (2);
+		return (SUCCESS);
 	if (!take_right_fork(philo, i))
-		return (2);
+		return (SUCCESS);
 	if (philo->nbr_forks == 2)
 		return (SUCCESS);
 	else

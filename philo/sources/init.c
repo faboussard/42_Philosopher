@@ -66,12 +66,12 @@ int	init_philos(t_table *table, char **argv)
 		table->philo[i].time_to_die = ft_atoi(argv[j++]);
 		table->philo[i].time_to_eat = ft_atoi(argv[j++]);
 		table->philo[i].time_to_sleep = ft_atoi(argv[j++]);
+		table->philo[i].left_fork = 0;
 		if (argv[j])
 			table->philo[i].number_of_meals = ft_atoi(argv[j]);
 		else
 			table->philo[i].number_of_meals = -1;
 		table->philo[i].time_last_meal = get_time_in_ms();
-		table->philo[i].left_fork = i;
 		if (i == 0)
 		{
 			table->philo[i].r_fork_mutex = &(table->philo[table->num_of_philos - 1].l_fork_mutex);
