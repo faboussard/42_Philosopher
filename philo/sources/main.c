@@ -51,7 +51,10 @@ int	main(int argc, char **argv)
 	if (!init_philos(table, argv))
 		return (EXIT_FAILURE);
 	if (!init_mutex(table))
+	{
+		error_free(table, "error initializing mutex.");
 		return (EXIT_FAILURE);
+	}
 	launch_party(table);
 	destroy_mutex(table);
 	free_table(table);
