@@ -77,9 +77,9 @@ void	eat(t_philo *philo, int i)
 		usleep(philo->table->num_of_philos * 10);
 	if (!print_msg(philo, MSG_EAT, i))
 		return ;
-	pthread_mutex_lock(&philo->meal_lock);
+	pthread_mutex_lock(&philo->time_last_meal_lock);
 	philo->time_last_meal = get_time_in_ms();
-	pthread_mutex_unlock(&philo->meal_lock);
+	pthread_mutex_unlock(&philo->time_last_meal_lock);
 	ft_usleep(philo->time_to_eat, philo);
 	release_forks(philo);
 }

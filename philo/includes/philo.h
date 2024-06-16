@@ -45,7 +45,6 @@ typedef struct s_table
 {
 	int		num_of_philos;
 	size_t				start_time;
-	t_mutex				start_time_mutex;
 	bool				dead_detected;
 	int					end_dinner;
 	t_mutex 			end_dinner_mutex;
@@ -64,7 +63,7 @@ typedef struct s_philo
 	int					number_of_meals;
 	t_mutex				number_of_meals_mutex;
 	size_t				time_last_meal;
-	t_mutex				meal_lock;
+	t_mutex				time_last_meal_lock;
 	int				*right_fork;
 	int				left_fork;
 	int					nbr_forks;

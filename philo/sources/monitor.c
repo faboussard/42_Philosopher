@@ -14,10 +14,10 @@
 
 static int	philosopher_dead(t_philo *philo, size_t time_to_die)
 {
-	pthread_mutex_lock(&philo->meal_lock);
+	pthread_mutex_lock(&philo->time_last_meal_lock);
 	if (get_time_in_ms() - philo->time_last_meal >= time_to_die)
-		return (pthread_mutex_unlock(&philo->meal_lock), 1);
-	pthread_mutex_unlock(&philo->meal_lock);
+		return (pthread_mutex_unlock(&philo->time_last_meal_lock), 1);
+	pthread_mutex_unlock(&philo->time_last_meal_lock);
 	return (0);
 }
 

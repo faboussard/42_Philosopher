@@ -25,28 +25,29 @@ int	init_table(char *const *argv, t_table **table)
 	return (1);
 }
 
-int	valid_args(int argc, char **argv)
+void init_philo(t_table *table, char *const *argv, int i, int j)
 {
-	unsigned int	i;
-	int				nb_arg;
-
-	i = 0;
-	nb_arg = argc - 1;
-	while (nb_arg > 0)
+	table->philo[i].table = table;
+	table->philo[i].id = i + 1;
+	table->philo[i].time_to_die = ft_atoi(argv[j++]);
+	table->philo[i].time_to_eat = ft_atoi(argv[j++]);
+	table->philo[i].time_to_sleep = ft_atoi(argv[j++]);
+	table->philo[i].left_fork = 0;
+	if (argv[j])
+		table->philo[i].number_of_meals = ft_atoi(argv[j]);
+	else
+		table->philo[i].number_of_meals = -1;
+	table->philo[i].time_last_meal = get_time_in_ms();
+	if (i == 0)
 	{
-		if (ft_atol(argv[nb_arg]) <= 0 || ft_atol(argv[nb_arg]) > INT_MAX
-			|| ft_atol(argv[nb_arg]) < INT_MIN)
-			return (false);
-		while (argv[nb_arg][i])
-		{
-			if (!ft_isdigit(argv[nb_arg][i]))
-				return (false);
-			i++;
-		}
-		nb_arg--;
-		i = 0;
+		table->philo[i].r_fork_mutex = &(table->philo[table->num_of_philos - 1].l_fork_mutex);
+		table->philo[i].right_fork = &(table->philo[table->num_of_philos - 1].left_fork);
 	}
-	return (true);
+	else
+	{
+		table->philo[i].r_fork_mutex = &(table->philo[i - 1].l_fork_mutex);
+		table->philo[i].right_fork = &(table->philo[i - 1].left_fork);
+	}
 }
 
 int	init_philos(t_table *table, char **argv)
@@ -61,27 +62,7 @@ int	init_philos(t_table *table, char **argv)
 	while (i < table->num_of_philos)
 	{
 		j = 2;
-		table->philo[i].table = table;
-		table->philo[i].id = i + 1;
-		table->philo[i].time_to_die = ft_atoi(argv[j++]);
-		table->philo[i].time_to_eat = ft_atoi(argv[j++]);
-		table->philo[i].time_to_sleep = ft_atoi(argv[j++]);
-		table->philo[i].left_fork = 0;
-		if (argv[j])
-			table->philo[i].number_of_meals = ft_atoi(argv[j]);
-		else
-			table->philo[i].number_of_meals = -1;
-		table->philo[i].time_last_meal = get_time_in_ms();
-		if (i == 0)
-		{
-			table->philo[i].r_fork_mutex = &(table->philo[table->num_of_philos - 1].l_fork_mutex);
-			table->philo[i].right_fork = &(table->philo[table->num_of_philos - 1].left_fork);
-		}
-		else
-		{
-			table->philo[i].r_fork_mutex = &(table->philo[i - 1].l_fork_mutex);
-			table->philo[i].right_fork = &(table->philo[i - 1].left_fork);
-		}
+		init_philo(table, argv, i, j);
 		i++;
 	}
 	return (1);
