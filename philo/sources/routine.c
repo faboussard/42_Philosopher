@@ -68,6 +68,8 @@ void	*routine(void *pointer)
 	bool	has_meals;
 
 	philo = (t_philo *)pointer;
+	if (!print_msg(philo, "is thinking", 1))
+		return (pointer);
 	if (philo->id % 2 == 0)
 		ft_usleep(philo->time_to_eat / 2, philo);
 	pthread_mutex_lock(&philo->number_of_meals_mutex);
