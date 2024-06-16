@@ -29,10 +29,10 @@ static void	until_you_die(t_philo *philo)
 	while (1)
 	{
 		eat(philo, i);
-		if (!print_msg(philo, "is sleeping", i))
+		if (!print_msg(philo, MSG_SLEEP, i))
 			return ;
 		ft_usleep(philo->time_to_sleep, philo);
-		if (!print_msg(philo, "is thinking", i))
+		if (!print_msg(philo, MSG_THINK, i))
 			return ;
 	}
 }
@@ -54,10 +54,10 @@ static void	only_x_meals(t_philo *philo)
 			philo->table->end_dinner = 1;
 			pthread_mutex_unlock(&philo->table->end_dinner_mutex);
 		}
-		if (!print_msg(philo, "is sleeping", i))
+		if (!print_msg(philo, MSG_SLEEP, i))
 			return ;
 		ft_usleep(philo->time_to_sleep, philo);
-		if (!print_msg(philo, "is thinking", i))
+		if (!print_msg(philo, MSG_THINK, i))
 			return ;
 	}
 }
@@ -68,10 +68,12 @@ void	*routine(void *pointer)
 	bool	has_meals;
 
 	philo = (t_philo *)pointer;
-	if (!print_msg(philo, "is thinking", 1))
-		return (pointer);
 	if (philo->id % 2 == 0)
+	{
+		if (!print_msg(philo, MSG_THINK, 1))
+			return (pointer);
 		ft_usleep(philo->time_to_eat / 2, philo);
+	}
 	pthread_mutex_lock(&philo->number_of_meals_mutex);
 	if (philo->number_of_meals > 0)
 		has_meals = true;

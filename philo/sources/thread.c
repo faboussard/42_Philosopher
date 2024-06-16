@@ -30,7 +30,7 @@ void	*monitor(void *pointer)
 int	create_threads(t_table *table)
 {
 	pthread_t		observer;
-	unsigned int	i;
+	int	i;
 	bool			flag;
 
 	i = 0;

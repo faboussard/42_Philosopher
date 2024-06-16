@@ -51,8 +51,8 @@ int	valid_args(int argc, char **argv)
 
 int	init_philos(t_table *table, char **argv)
 {
-	size_t	i;
-	size_t	j;
+	int	i;
+	int	j;
 
 	i = 0;
 	table->philo = ft_calloc(table->num_of_philos, sizeof(t_philo));
@@ -62,7 +62,7 @@ int	init_philos(t_table *table, char **argv)
 	{
 		j = 2;
 		table->philo[i].table = table;
-		table->philo[i].id = i;
+		table->philo[i].id = i + 1;
 		table->philo[i].time_to_die = ft_atoi(argv[j++]);
 		table->philo[i].time_to_eat = ft_atoi(argv[j++]);
 		table->philo[i].time_to_sleep = ft_atoi(argv[j++]);
@@ -71,6 +71,17 @@ int	init_philos(t_table *table, char **argv)
 		else
 			table->philo[i].number_of_meals = -1;
 		table->philo[i].time_last_meal = get_time_in_ms();
+		table->philo[i].left_fork = i;
+		if (i == 0)
+		{
+			table->philo[i].r_fork_mutex = &(table->philo[table->num_of_philos - 1].l_fork_mutex);
+			table->philo[i].right_fork = &(table->philo[table->num_of_philos - 1].left_fork);
+		}
+		else
+		{
+			table->philo[i].r_fork_mutex = &(table->philo[i - 1].l_fork_mutex);
+			table->philo[i].right_fork = &(table->philo[i - 1].left_fork);
+		}
 		i++;
 	}
 	return (1);

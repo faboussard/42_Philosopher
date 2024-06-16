@@ -12,65 +12,20 @@
 
 #include "philo.h"
 
-int	init_forks_mutex(t_table *table)
-{
-	unsigned int	i;
-
-	i = 0;
-	table->forks = malloc(sizeof(pthread_mutex_t) * table->num_of_philos);
-	if (table->forks == NULL)
-		return (0);
-	while (i < table->num_of_philos)
-		pthread_mutex_init(&table->forks[i++], NULL);
-	i = 0;
-	while (i < table->num_of_philos)
-	{
-		table->philo[i].l_fork_mutex = &table->forks[i];
-		table->philo[i].r_fork_mutex = &table->forks[(i + 1)
-			% table->num_of_philos];
-		i++;
-	}
-	return (1);
-}
-
-static void	destroy_philo_mutexes(const t_table *table, unsigned int i)
-{
-	while (i < table->num_of_philos)
-	{
-		pthread_mutex_destroy(&table->philo[i].number_of_meals_mutex);
-		pthread_mutex_destroy(&table->philo[i].meal_lock);
-		pthread_mutex_destroy(&table->forks[i]);
-		i++;
-	}
-}
-
-static void	destroy_table_mutexes(t_table *table)
-{
-	pthread_mutex_destroy(&table->start_time_mutex);
-	pthread_mutex_destroy(&table->print_mutex);
-	pthread_mutex_destroy(&table->death_detected_mutex);
-	pthread_mutex_destroy(&table->end_dinner_mutex);
-}
-
 int	init_mutex(t_table *table)
 {
-	unsigned int	i;
+	int	i;
 
 	i = 0;
 	pthread_mutex_init(&table->start_time_mutex, NULL);
 	pthread_mutex_init(&table->print_mutex, NULL);
 	pthread_mutex_init(&table->death_detected_mutex, NULL);
 	pthread_mutex_init(&table->end_dinner_mutex, NULL);
-	if (!init_forks_mutex(table))
-	{
-		destroy_table_mutexes(table);
-		error_free(table, "Error initializing fork mutexes");
-		return (0);
-	}
 	while (i < table->num_of_philos)
 	{
 		pthread_mutex_init(&table->philo[i].meal_lock, NULL);
 		pthread_mutex_init(&table->philo[i].number_of_meals_mutex, NULL);
+		pthread_mutex_init(&table->philo[i].l_fork_mutex, NULL);
 		i++;
 	}
 	return (1);
@@ -78,9 +33,19 @@ int	init_mutex(t_table *table)
 
 void	destroy_mutex(t_table *table)
 {
-	unsigned int	i;
+	int	i;
 
 	i = 0;
-	destroy_table_mutexes(table);
-	destroy_philo_mutexes(table, i);
+	pthread_mutex_destroy(&table->start_time_mutex);
+	pthread_mutex_destroy(&table->print_mutex);
+	pthread_mutex_destroy(&table->death_detected_mutex);
+	pthread_mutex_destroy(&table->end_dinner_mutex);
+	while (i < table->num_of_philos)
+	{
+		pthread_mutex_destroy(&table->philo[i].number_of_meals_mutex);
+		pthread_mutex_destroy(&table->philo[i].meal_lock);
+		pthread_mutex_destroy(&table->philo[i].l_fork_mutex);
+		pthread_mutex_destroy(table->philo[i].r_fork_mutex);
+		i++;
+	}
 }

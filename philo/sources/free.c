@@ -18,8 +18,6 @@ void	free_table(t_table *table)
 		return ;
 	if (table->philo)
 	{
-		free(table->forks);
-		table->forks = NULL;
 		free(table->philo);
 		table->philo = NULL;
 	}

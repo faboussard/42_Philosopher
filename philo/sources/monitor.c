@@ -33,7 +33,7 @@ static int	end_dinner(t_philo *philo)
 
 int	check_if_dead(t_philo *philos)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (i < philos->table->num_of_philos)
@@ -42,7 +42,7 @@ int	check_if_dead(t_philo *philos)
 			return (1);
 		if (philosopher_dead(&philos[i], philos[i].time_to_die))
 		{
-			print_msg(&philos[i], "died", 1);
+			print_msg(&philos[i], MSG_DIE, 1);
 			return (1);
 		}
 		i++;
