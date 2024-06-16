@@ -42,7 +42,7 @@ int	check_if_dead(t_philo *philos)
 			return (1);
 		if (philosopher_dead(&philos[i], philos[i].time_to_die))
 		{
-			print_msg(&philos[i], MSG_DIE, 1);
+			print_msg(&philos[i], "died", 1);
 			return (1);
 		}
 		i++;
