@@ -25,7 +25,7 @@ int	init_table(char *const *argv, t_table **table)
 	return (1);
 }
 
-void init_philo(t_table *table, char *const *argv, int i, int j)
+void	init_philo(t_table *table, char *const *argv, int i, int j)
 {
 	table->philo[i].table = table;
 	table->philo[i].id = i + 1;
@@ -40,8 +40,10 @@ void init_philo(t_table *table, char *const *argv, int i, int j)
 	table->philo[i].time_last_meal = get_time_in_ms();
 	if (i == 0)
 	{
-		table->philo[i].r_fork_mutex = &(table->philo[table->num_of_philos - 1].l_fork_mutex);
-		table->philo[i].right_fork = &(table->philo[table->num_of_philos - 1].left_fork);
+		table->philo[i].r_fork_mutex = &(table->philo[table->num_of_philos
+				- 1].l_fork_mutex);
+		table->philo[i].right_fork = &(table->philo[table->num_of_philos
+				- 1].left_fork);
 	}
 	else
 	{

@@ -44,7 +44,7 @@ static int	ft_strcmp(const char *s1, const char *s2)
 	return (s1[i] - s2[i]);
 }
 
-int print_msg(t_philo *philo, char *msg, int i)
+int	print_msg(t_philo *philo, char *msg, int i)
 {
 	size_t	time;
 

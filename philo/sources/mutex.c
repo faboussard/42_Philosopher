@@ -27,7 +27,8 @@ int	init_mutex(t_table *table)
 	{
 		if (pthread_mutex_init(&table->philo[i].time_last_meal_lock, NULL) != 0)
 			return (0);
-		if (pthread_mutex_init(&table->philo[i].number_of_meals_mutex, NULL) != 0)
+		if (pthread_mutex_init(&table->philo[i].number_of_meals_mutex,
+				NULL) != 0)
 			return (0);
 		if (pthread_mutex_init(&table->philo[i].l_fork_mutex, NULL) != 0)
 			return (0);

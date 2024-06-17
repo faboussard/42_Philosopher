@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-static void release_forks(t_philo *philo)
+static void	release_forks(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->l_fork_mutex);
 	if (philo->left_fork == TAKEN)
@@ -34,12 +34,12 @@ static int	take_left_fork(t_philo *philo, int i)
 		if (!print_msg(philo, MSG_FORK, i))
 		{
 			pthread_mutex_unlock(&philo->l_fork_mutex);
-			return 0;
+			return (0);
 		}
 		philo->nbr_forks++;
 	}
 	pthread_mutex_unlock(&philo->l_fork_mutex);
-	return 1;
+	return (1);
 }
 
 static int	take_right_fork(t_philo *philo, int i)
@@ -59,7 +59,7 @@ static int	take_right_fork(t_philo *philo, int i)
 	return (1);
 }
 
-static int take_forks(t_philo *philo, int i)
+static int	take_forks(t_philo *philo, int i)
 {
 	if (!take_left_fork(philo, i))
 		return (SUCCESS);

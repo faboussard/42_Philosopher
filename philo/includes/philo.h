@@ -23,10 +23,11 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-#define SUCCESS 0
-#define FAILURE 1
+# define SUCCESS 0
+# define FAILURE 1
 
-enum {
+enum
+{
 	FREE,
 	TAKEN,
 };
@@ -43,11 +44,11 @@ typedef pthread_mutex_t	t_mutex;
 
 typedef struct s_table
 {
-	int		num_of_philos;
+	int					num_of_philos;
 	size_t				start_time;
 	bool				dead_detected;
 	int					end_dinner;
-	t_mutex 			end_dinner_mutex;
+	t_mutex				end_dinner_mutex;
 	t_mutex				death_detected_mutex;
 	t_mutex				print_mutex;
 	t_philo				*philo;
@@ -56,7 +57,7 @@ typedef struct s_table
 typedef struct s_philo
 {
 	pthread_t			tid;
-	int		id;
+	int					id;
 	size_t				time_to_die;
 	size_t				time_to_eat;
 	size_t				time_to_sleep;
@@ -64,11 +65,11 @@ typedef struct s_philo
 	t_mutex				number_of_meals_mutex;
 	size_t				time_last_meal;
 	t_mutex				time_last_meal_lock;
-	int				*right_fork;
-	int				left_fork;
+	int					*right_fork;
+	int					left_fork;
 	int					nbr_forks;
 	t_mutex				*r_fork_mutex;
-	t_mutex			    l_fork_mutex;
+	t_mutex				l_fork_mutex;
 	t_table				*table;
 }						t_philo;
 
@@ -92,7 +93,7 @@ void					launch_party(t_table *table);
 void					*routine(void *data);
 int						init_mutex(t_table *table);
 void					destroy_mutex(t_table *table);
-int print_msg(t_philo *philo, char *msg, int i);
+int						print_msg(t_philo *philo, char *msg, int i);
 void					eat(t_philo *philo, int i);
 int						dead_loop(t_philo *philo);
 int						ft_usleep(size_t ms, t_philo *philosopher);

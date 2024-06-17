@@ -23,7 +23,7 @@ int	dead_loop(t_philo *philo)
 
 static void	until_you_die(t_philo *philo)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (1)
@@ -39,7 +39,7 @@ static void	until_you_die(t_philo *philo)
 
 static void	only_x_meals(t_philo *philo)
 {
-	int i;
+	int	i;
 
 	pthread_mutex_lock(&philo->number_of_meals_mutex);
 	i = philo->number_of_meals;
@@ -72,7 +72,7 @@ void	*routine(void *pointer)
 	{
 		if (!print_msg(philo, MSG_THINK, 1))
 			return (pointer);
-		ft_usleep(philo->time_to_eat / 2, philo);
+		ft_usleep(philo->time_to_eat / 3, philo);
 	}
 	pthread_mutex_lock(&philo->number_of_meals_mutex);
 	if (philo->number_of_meals > 0)

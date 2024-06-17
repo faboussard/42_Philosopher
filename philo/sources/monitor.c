@@ -30,7 +30,6 @@ static int	end_dinner(t_philo *philo)
 	return (0);
 }
 
-
 int	check_if_dead(t_philo *philos)
 {
 	int	i;

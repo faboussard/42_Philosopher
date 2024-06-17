@@ -29,9 +29,9 @@ void	*monitor(void *pointer)
 
 int	create_threads(t_table *table)
 {
-	pthread_t		observer;
-	int	i;
-	bool			flag;
+	pthread_t	observer;
+	int			i;
+	bool		flag;
 
 	i = 0;
 	flag = 0;
